@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Example App</title>
+    </head>
+    <body>
+        {{{body}}}
+        {{#each games}}
+
+            <a href="/{{app_code}}">
+                <h1>{{app_code}}</h1>
+            </a>
+            <p>{{descrip}}</p>
+            <p>Numero de partides: {{num_partides}}</p>
+            <p>Last played: {{dat_u_partida}}</p>
+        {{/each}}
+    </body>
+</html>
