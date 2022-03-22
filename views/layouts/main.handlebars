@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <title>Example App</title>
     </head>
     <body>
         {{{body}}}
         {{#each posts}}
-            <a href="/{{url}}">
-                <h1>{{title}}</h1>
+            <a href="{{url}}">
+                <h1>{{math @index "+" 1}}: {{title}}</h1>
             </a>
-            <p>{{body}}</p>
+            {{!-- <p>{{msg}}</p> --}}
             <p>Likes: {{likes}}</p>
-            <p>post time: {{prettifyDate creationtime}}</p>
+            <p>Posted by {{username}} {{prettifyDate creationtime}}</p>
         {{/each}}
     </body>
 </html>

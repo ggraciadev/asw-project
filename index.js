@@ -2,7 +2,7 @@ const db = require("./db.js");
 const express = require('express');
 var exphbs  = require('express-handlebars');
 var bodyParser = require("body-parser");
-
+const path = require ('path');
 const app = express();
 
 const PORT = process.env.PORT || 5000
@@ -46,16 +46,39 @@ app.engine('handlebars', exphbs({
                     return temp + " days ago";
                 }
             }
-        }
+        },
+        eachData: function(context, options) {
+            var fn = options.fn, inverse = options.inverse, ctx;
+            var ret = "";
+        
+            if(context && context.length > 0) {
+              for(var i=0, j=context.length; i<j; i++) {
+                ctx = Object.create(context[i]);
+                ctx.index = i;
+                ret = ret + fn(ctx);
+              }
+            } else {
+              ret = inverse(this);
+            }
+            return ret;
+          },
+          math: function(lvalue, operator, rvalue, options) {
+            lvalue = parseFloat(lvalue);
+            rvalue = parseFloat(rvalue);
+          
+            return {
+                "+": lvalue + rvalue
+            }[operator];
+          }
     }
 }));
 
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(errorHandler);
+app.use(express.static(path.join(__dirname, '/public')))
 
 app.get('/', function(req, res) {
-    console.log("Estoy dentro de home");
     db.query("select * from Post order by likes desc;", 
     [], onData, res, 'main');
     //res.end('Pagina principal ordenada por likes');
@@ -79,57 +102,28 @@ app.post('/submit', function(req, res) {
     
     let title = req.body.title;
     let url = req.body.url;
-    let body = req.body.body;
-    let username = 'tortuga';
+    let msg = req.body.msg;
+    let username = 'FIBer promedio';
     let creationTime = new Date().toISOString();
     let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
-        "', '" + body + "', '" + url + "', '" + username + "', '" + creationTime + "')";
+        "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')";
         
-    console.log("query: " + q);
-        
-    res.redirect('/home');
+    
+    
+    db.query(q, [], onPost, res, 'main');
     /*db.query("insert into X(x, y, z) values ('" + req.body.X + "', '" + req.body.Y + 
     "', " + req.body.Z + ");", [], onData, res, 'home');*/
-
-    //aqui pillaremos la info del formulario y haremos un insert en la base de datos
-});
-
-app.get('/422', function (req, res) {
-    res.end('Error 422. Nom de jugador o la puntuació no ha estat definida.');
 });
 
 app.get('/500', function (req,res) {
-    res.end('Error 500. Error al servidor.');
-});
-
-app.get('/:app_codi', function(req,res) {
-    if(req.params.app_codi == "favicon.ico") return;
-    
-    db.query( "select rec.player, rec.score, rec.datetime as date from record rec where rec.app_code = '" + req.params.app_codi + "' order by rec.score desc;"
-        ,[], onData, res, 'scores', req.params.app_codi);
+    res.end('Error 500: Server error.');
 });
 
 
-app.post('/:app_codi', function (req,res) {
-    console.log(req);
-    if(req.params.app_codi == "favicon.ico") return;
-    if(!req.body.Name || !req.body.Score) {
-        res.status(422);
-        console.log("Error 422");
-        res.redirect('/422');
-        return;
-    }
-    db.query("insert into record(app_code, player, score) values ('" + req.params.app_codi + "', '" + req.body.Name + 
-    "', " + req.body.Score + ");", [], onData, res, 'scores', req.params.app_codi );
-});
-
-app.get("/error", function(req, res, next){
-    next("Error porquesi");
-});
  
 app.get("*", function(req, res) {
     res.status(404);
-    res.end('Error 404: No es troba la pagina solicitada.');
+    res.end('Error 404: Not found.');
  });
  
 function errorHandler (err, req, res, next) {
@@ -145,8 +139,26 @@ function onData(err, res, data, layoutName, gameName) {
             return;
         }
         */
-        console.log(data.rows);
+        //console.log(data.rows);
         renderPage(res, 'home', {layout: layoutName, posts: data.rows});
+    }
+    else {
+        res.status(500);
+        res.redirect('/500');
+        console.log("Error 500");
+    }
+}
+
+function onPost(err, res, data, layoutName, gameName) {
+    if(!err) {
+        /*
+        if(data.rows.length == 0 && gameName != null) {
+            res.redirect('/' + gameName);
+            return;
+        }
+        */
+        //console.log(data.rows);
+        res.redirect('/');
     }
     else {
         res.status(500);
