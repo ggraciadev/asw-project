@@ -7,7 +7,49 @@ const app = express();
 
 const PORT = process.env.PORT || 5000
 
-app.engine('handlebars', exphbs({defaultLayout: 'blog'}));
+app.engine('handlebars', exphbs({
+    defaultLayout: 'blog',
+    helpers: {
+        prettifyDate: function(timeStamp) {
+            let d = new Date(timeStamp);
+            let dNow = new Date();
+
+            let result = Math.abs(dNow - d) / 1000 / 3600;
+
+            if(result < 0.01) {
+                return "Just now";
+            }
+            else if(result < 1) {
+                let temp = (result * 60).toFixed(0);
+                if(temp == 1) {
+                    return temp + " minute ago";
+                }
+                else {
+                    return temp + " minutes ago";
+                }
+            }
+            else if(result < 24) {
+                let temp = (result).toFixed(0);
+                if(temp == 1) {
+                    return temp + " hour ago";
+                }
+                else {
+                    return temp + " hours ago";
+                }
+            }
+            else {
+                let temp = (result / 24).toFixed(0);
+                if(temp == 1) {
+                    return temp + " day ago";
+                }
+                else {
+                    return temp + " days ago";
+                }
+            }
+        }
+    }
+}));
+
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(errorHandler);
@@ -34,16 +76,18 @@ app.get('/submit', function(req, res) {
 });
 
 app.post('/submit', function(req, res) {
-    console.log(req.body);
+    
+    let title = req.body.title;
+    let url = req.body.url;
+    let body = req.body.body;
+    let username = 'tortuga';
+    let creationTime = new Date().toISOString();
+    let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
+        "', '" + body + "', '" + url + "', '" + username + "', '" + creationTime + "')";
+        
+    console.log("query: " + q);
+        
     res.redirect('/home');
-
-    /*
-    TABLAS DE LA BASE DE DATOS:
-        USER(USERANAME, PASSWORD)
-        POST(ID, TITLE, URL, LIKES, USERNAME, TIME CREATION, TEXT)
-        COMMENT(USERNAME, POST_ID, CONTENT)
-    */
-
     /*db.query("insert into X(x, y, z) values ('" + req.body.X + "', '" + req.body.Y + 
     "', " + req.body.Z + ");", [], onData, res, 'home');*/
 
