@@ -1,14 +1,23 @@
 const { Pool, Client } = require('pg')
 exports.query = function(query, params, callback, originalRes, layoutName, gameName) {
-    const connectionString = "postgres://sdyqcziocuczov:838a17001f2d3115d4a8979729ea33ef7b176c67c088f6d4b3d418bfa3b34408@ec2-54-217-207-242.eu-west-1.compute.amazonaws.com:5432/d1qh059savueha"
-      + "?ssl=true";
+    console.log("DB QUERY");
+    //const connectionString = "postgres://ulxouuifxljact:a29ff5ec3cb4ead4b7b8c92c2f01367eaeedb9325fe51d4a194ff3304803f9d8@ec2-63-34-223-144.eu-west-1.compute.amazonaws.com:5432/dbj733ha962jhl";
     const client = new Client({
-      connectionString: connectionString,
+        user: "ulxouuifxljact",
+        password: "a29ff5ec3cb4ead4b7b8c92c2f01367eaeedb9325fe51d4a194ff3304803f9d8",
+        database: "dbj733ha962jhl",
+        port: 5432,
+        host: "ec2-63-34-223-144.eu-west-1.compute.amazonaws.com",
+        rejectUnauthorized: false,
+        ssl: true
     })
     client.connect((err) => {
         if (err) {
             console.error('connection error', err.stack);
             callback(err, originalRes);
+        }
+        else {
+            console.log("connected");
         }
     })
  
@@ -17,6 +26,7 @@ exports.query = function(query, params, callback, originalRes, layoutName, gameN
             console.log(err.stack)
             callback(err, originalRes);
         } else {
+            console.log(params);
             callback(err, originalRes, res, layoutName, gameName);
             client.end(); /*Aquesta funció te la vas deixar i  per tant, petava ja que 
             heroku nomes permet 20 connexions i constantment estas obrint connexions pero

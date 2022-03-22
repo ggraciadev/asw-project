@@ -6,14 +6,13 @@
     </head>
     <body>
         {{{body}}}
-        {{#each games}}
-
-            <a href="/{{app_code}}">
-                <h1>{{app_code}}</h1>
+        {{#each posts}}
+            <a href="/{{url}}">
+                <h1>{{title}}</h1>
             </a>
-            <p>{{descrip}}</p>
-            <p>Numero de partides: {{num_partides}}</p>
-            <p>Last played: {{dat_u_partida}}</p>
+            <p>{{body}}</p>
+            <p>Likes: {{likes}}</p>
+            <p>post time: {{creationTime}}</p>
         {{/each}}
     </body>
 </html>

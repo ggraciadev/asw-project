@@ -13,9 +13,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(errorHandler);
 
 app.get('/', function(req, res) {
-    /*db.query("SELECT app.app_code, app.descrip, count(rec.app_code) as num_partides, max(rec.datetime) as dat_u_partida from app app, record rec where rec.app_code = app.app_code group by app.app_code", 
-    [], onData, res, 'main');*/
-    res.end('Pagina principal ordenada por likes');
+    console.log("Estoy dentro de home");
+    db.query("select * from Post order by likes desc;", 
+    [], onData, res, 'main');
+    //res.end('Pagina principal ordenada por likes');
 
 });
 
@@ -24,7 +25,8 @@ app.get('/home', function(req, res) {
 });
 
 app.get('/newest', function(req, res) {
-    res.end('Pagina principal ordenada por fecha');
+    db.query("select * from Post order by creationTime desc;", 
+    [], onData, res, 'main');
 });
 
 app.get('/submit', function(req, res) {
@@ -93,12 +95,14 @@ function errorHandler (err, req, res, next) {
 
 function onData(err, res, data, layoutName, gameName) {
     if(!err) {
+        /*
         if(data.rows.length == 0 && gameName != null) {
             res.redirect('/' + gameName);
             return;
         }
+        */
         console.log(data.rows);
-        renderPage(res, 'home', {layout: layoutName, games: data.rows, gameId: gameName});
+        renderPage(res, 'home', {layout: layoutName, posts: data.rows});
     }
     else {
         res.status(500);
