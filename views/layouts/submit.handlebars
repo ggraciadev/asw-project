@@ -1,24 +1,70 @@
-<br>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <title>Example App</title>
     </head>
     <body>
         {{{body}}}
-        <div>
+        <div id="submitDiv">
             <form action = "" method="post">
-                <label for="title">title:</label><br>
-                <input type="text" id="title" name="title"><br>
-                <label for="url">url:</label><br>
-                <input type="text" id="url" name="url">
-                {{!-- <p>or</p>
-                <label for="msg">text:</label><br> 
-                <input type="text" id="msg" name="msg"> --}}
-                <br>
-                <br>
-                <input type="submit" value="Submit">
+                <table border="0">
+                    <tbody>
+                        <tr>
+                            <td id = "titleText">title</td>
+                            <td>
+                                <input type="text" name="title" value="" size="50">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id = "titleText">url</td>
+                            <td>
+                                <input type="url" name="url" value="" size="50">
+                            </td>
+                        </tr>
+                        {{!-- <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                                <b>or</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id = "titleText">text</td>
+                            <td>
+                                <textarea name="text" rows="4" cols="49"></textarea>
+                            </td>
+                        </tr> --}}
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                                <input id="submitButton" type="submit" value="submit">
+                            </td>
+                        </tr>
+                        <tr style="height:20px">
+
+                        </tr>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td id = "titleText">
+                                Leave url blank to submit a question for discussion. If there is no url, the text (if any) will appear at the top of the thread.
+                                <br><br>
+                                You can also submit via <a id = "titleText" href="" rel="nofollow"><u>bookmarklet</u></a>.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </form>
         </div>
     </body>

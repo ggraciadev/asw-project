@@ -1,12 +1,13 @@
+a{text-decoration: none;}
+
 #topbar {
     background-color: #ff6600;
-    line-height: 30px;
     text-align: left;
     position: fixed; 
     top: 0;
     left: 0;
-    width: 100%;
-
+    width: 86.15%;
+    margin-left: 133px;
 }
 
 #topbarItemsContainer {
@@ -16,13 +17,95 @@
     width: 100%;
 }
 
+#titulo {
+    font-size: 13px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: black;
+    margin-bottom: 0;
+    
+    font-weight: 400;
+}
+
+#inputGroup {
+    padding-top: 20px;
+    display: flex;
+    width: 390px;
+    justify-content: space-between;
+    color: gray;
+    text-decoration: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
+
+}
+
+#title, #url {
+    min-width: 350px;
+}
+
+#submitButton {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 11px;
+    padding: 2px 7px;
+}
+
+.botText {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: gray;
+    font-size: 13px;
+
+}
+
+.image {
+    margin: 1px 5px;
+    border: 1px #ffffff solid;
+}
+
+#titleText {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #828282;    
+    font-size: 12px;
+    text-decoration: none;
+}
+
+#subtitulo {
+    margin-top: 0;
+    font-size: 9.33333px;
+    font-weight: 400;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #828282;
+}
+
 .topbarItem {
     padding: 5px;
     color: black;
     text-decoration: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
+}
+
+.topbarTitle {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
 }
 
 
 #current {
     color: white;
+}
+
+#mainDiv {
+    padding-left: 50px;
+    margin-left: 125px;
+    margin-right: 125px;
+    background-color: #f6f6ef;
+}
+
+#submitDiv {
+    margin-top: 12.5px;
+    margin-left: 125px;
+    margin-right: 125px;
+    background-color: #f6f6ef;
 }

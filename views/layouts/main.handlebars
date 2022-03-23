@@ -3,14 +3,16 @@
     <head>
     </head>
     <body>
-        {{{body}}}
-        {{#each posts}}
-            <a href="{{url}}">
-                <h1>{{math @index "+" 1}}: {{title}}</h1>
-            </a>
-            {{!-- <p>{{msg}}</p> --}}
-            <p>Likes: {{likes}}</p>
-            <p>Posted by {{username}} {{prettifyDate creationtime}}</p>
-        {{/each}}
+        <div id="mainDiv">
+            {{{body}}}
+            {{#each posts}}
+                <a href="{{url}}">
+                    <h1 id="titulo">{{math @index "+" 1}}. {{title}} ({{url}})</h1>
+                </a>
+                {{!-- <p>{{msg}}</p> --}}
+                <p id="subtitulo">{{likes}} points by {{username}} {{prettifyDate creationtime}} | flag | hide | 0 comments</p>
+            {{/each}}
+            <br>
+        </div>
     </body>
 </html>
