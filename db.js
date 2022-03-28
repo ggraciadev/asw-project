@@ -28,12 +28,7 @@ exports.query = function(query, params, callback, originalRes, layoutName, gameN
         } else {
             console.log(params);
             callback(err, originalRes, res, layoutName, gameName);
-            client.end(); /*Aquesta funció te la vas deixar i  per tant, petava ja que 
-            heroku nomes permet 20 connexions i constantment estas obrint connexions pero
-            no les tanques (una molt mala pràctica) i aleshores es queden infinites connexions
-            escoltant pero sense utilitzar-les. Encara que utilitzar la mateixa connexió reutilitzant-la
-            seria molt més òptim.
-            */
+            client.end(); 
         }
     });
 };

@@ -47,29 +47,20 @@ app.engine('handlebars', exphbs({
                 }
             }
         },
-        eachData: function(context, options) {
-            var fn = options.fn, inverse = options.inverse, ctx;
-            var ret = "";
-        
-            if(context && context.length > 0) {
-              for(var i=0, j=context.length; i<j; i++) {
-                ctx = Object.create(context[i]);
-                ctx.index = i;
-                ret = ret + fn(ctx);
-              }
-            } else {
-              ret = inverse(this);
-            }
-            return ret;
-          },
-          math: function(lvalue, operator, rvalue, options) {
+        math: function(lvalue, operator, rvalue) {
             lvalue = parseFloat(lvalue);
             rvalue = parseFloat(rvalue);
-          
+            
             return {
                 "+": lvalue + rvalue
             }[operator];
-          }
+        },
+        titleURL: function(title, url) {
+            if(url === ""){
+                return title;
+            }
+            return title + " (" + url + ")";
+        },
     }
 }));
 
@@ -99,18 +90,23 @@ app.get('/submit', function(req, res) {
 });
 
 app.post('/submit', function(req, res) {
-    
     let title = req.body.title;
-    let url = req.body.url;
+    let url = req.body.url.trim();
     let msg = req.body.msg;
-    let username = 'FIBer promedio';
+    let username = 'tortuga';
     let creationTime = new Date().toISOString();
     let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
-        "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')";
-        
+        "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
+
+    if(title.trim() === "" && (url.trim() === "" || msg === undefined)){
+        //Aqui va una alerta en texto
+        console.log("Not allowed to submit empty values");
+        res.redirect('/submit');
+    }
+    else {
+        db.query(q, [], onPost, res, 'main');
+    }
     
-    
-    db.query(q, [], onPost, res, 'main');
     /*db.query("insert into X(x, y, z) values ('" + req.body.X + "', '" + req.body.Y + 
     "', " + req.body.Z + ");", [], onData, res, 'home');*/
 });
@@ -119,6 +115,11 @@ app.get('/500', function (req,res) {
     res.end('Error 500: Server error.');
 });
 
+app.get('/item', function (req,res) {
+    let id = req.url.match(/id=(.*)/)[1];
+    db.query("select * from Post where id="+id+";", 
+    [], onData, res, 'item');
+});
 
  
 app.get("*", function(req, res) {
