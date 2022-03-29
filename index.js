@@ -90,7 +90,7 @@ app.get('/submit', function(req, res) {
 });
 
 app.post('/submit', function(req, res) {
-    let title = req.body.title;
+    let title = req.body.title.trim();
     let url = req.body.url.trim();
     let msg = req.body.msg;
     let username = 'tortuga';
@@ -98,9 +98,23 @@ app.post('/submit', function(req, res) {
     let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
         "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
 
-    if(title.trim() === "" && (url.trim() === "" || msg === undefined)){
+
+    console.log("title: " + title);
+    console.log("msg: " + msg);
+    console.log("url: " + url);
+    if(title === undefined || title === ""){
         //Aqui va una alerta en texto
-        console.log("Not allowed to submit empty values");
+        console.log("Title needed");
+        res.redirect('/submit');
+    }
+    else if(url === "" && msg === undefined){
+        //Aqui va una alerta en texto
+        console.log("MSG or URL needed1");
+        res.redirect('/submit');
+    }
+    else if(url !== "" && msg !== ""){
+        //Aqui va una alerta en texto
+        console.log("MSG or URL needed2");
         res.redirect('/submit');
     }
     else {
@@ -115,11 +129,12 @@ app.get('/500', function (req,res) {
     res.end('Error 500: Server error.');
 });
 
+
 app.get('/item', function (req,res) {
     let id = req.url.match(/id=(.*)/)[1];
-    db.query("select * from Post where id="+id+";", 
-    [], onData, res, 'item');
+    db.query("select * from Post where id="+id+";", [], onData, res, 'item');
 });
+
 
  
 app.get("*", function(req, res) {
@@ -130,7 +145,6 @@ app.get("*", function(req, res) {
 function errorHandler (err, req, res, next) {
     res.end('error '+ err);
 }
-
 
 function onData(err, res, data, layoutName, gameName) {
     if(!err) {

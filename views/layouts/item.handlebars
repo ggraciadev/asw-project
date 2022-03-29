@@ -3,14 +3,34 @@
     <head>
     </head>
     <body>
+        <br>
         <div id="mainDiv">
             {{{body}}}
             {{#each posts}}
                 <a href="{{url}}">
-                    <h1 id="titulo">{{math @index "+" 1}}. {{titleURL title url}}</h1>
+                    <h1 id="tituloItem">{{titleURL title url}}</h1>
                 </a>
                 <span id="subtitulo">{{likes}} points by {{username}} {{prettifyDate creationtime}} | flag | hide | </span>
-                <a id="subtitulo" href="item?id={{id}}">0 POTATOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOS</a>
+                <a id="subtitulo">0 comments</a>
+                <p id="text">{{msg}}</p>
+                <textarea name="text" rows="8" cols="80"></textarea>
+                <br>
+                <form>
+                    <input type="submit" value="submit comment">
+                </form>
+
+
+                {{!-- esto lo he copiado vilmente de HN xd --}}
+                <center><span><a id=botLinks href="">Guidelines</a>
+                    | <a id=botLinks href="">FAQ</a>
+                    | <a id=botLinks href="">Lists</a>
+                    | <a id=botLinks href="">API</a>
+                    | <a id=botLinks href="">Security</a>
+                    | <a id=botLinks href="">Legal</a>
+                    | <a id=botLinks href="">Apply to YC</a>
+                    | <a id=botLinks href="">Contact</a></span><br><br><form method="get" action="//hn.algolia.com/">Search:
+                    <input type="text" name="q" value="" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="false"></form>
+                </center>
             {{/each}}
             <br>
         </div>

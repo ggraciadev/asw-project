@@ -27,6 +27,31 @@ a{text-decoration: none;}
     font-weight: 400;
 }
 
+#tituloItem {
+    font-size: 13px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #828282;
+    margin-bottom: 0;
+    
+    font-weight: 400;
+}
+
+#text {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #828282;    
+    font-size: 12px;
+    text-decoration: none;
+}
+
+#botLinks {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: black;    
+    font-size: 9px;
+    text-decoration: none;
+}
+
+
+
 #inputGroup {
     padding-top: 20px;
     display: flex;
@@ -101,10 +126,3 @@ a{text-decoration: none;}
     width: 80%;
     background-color: #f6f6ef;
 }
-/* 
-#submitDiv {
-    margin-top: 12.5px;
-    margin-left: 125px;
-    margin-right: 125px;
-    background-color: #f6f6ef;
-} */
