@@ -125,22 +125,55 @@ app.post('/submit', function(req, res) {
     "', " + req.body.Z + ");", [], onData, res, 'home');*/
 });
 
+app.post('/item', function(req, res) {
+    console.log(req.body.text);
+    /* let msg = req.body.text;
+    let username = 'tortuga';
+    let creationTime = new Date().toISOString();
+    let q = "insert into COMMENTS(title, msg, url, username, creationTime) values ('" + title + 
+        "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
+
+
+    console.log("title: " + title);
+    console.log("msg: " + msg);
+    console.log("url: " + url);
+    if(title === undefined || title === ""){
+        //Aqui va una alerta en texto
+        console.log("Title needed");
+        res.redirect('/submit');
+    }
+    else if(url === "" && msg === undefined){
+        //Aqui va una alerta en texto
+        console.log("MSG or URL needed1");
+        res.redirect('/submit');
+    }
+    else if(url !== "" && msg !== ""){
+        //Aqui va una alerta en texto
+        console.log("MSG or URL needed2");
+        res.redirect('/submit');
+    }
+    else {
+        db.query(q, [], onPost, res, 'main');
+    } */
+    
+    /*db.query("insert into X(x, y, z) values ('" + req.body.X + "', '" + req.body.Y + 
+    "', " + req.body.Z + ");", [], onData, res, 'home');*/
+});
+
 app.get('/500', function (req,res) {
     res.end('Error 500: Server error.');
 });
 
-
 app.get('/item', function (req,res) {
+    //let id = 57;
     let id = req.url.match(/id=(.*)/)[1];
     db.query("select * from Post where id="+id+";", [], onData, res, 'item');
 });
 
-
- 
 app.get("*", function(req, res) {
     res.status(404);
     res.end('Error 404: Not found.');
- });
+});
  
 function errorHandler (err, req, res, next) {
     res.end('error '+ err);
@@ -148,13 +181,6 @@ function errorHandler (err, req, res, next) {
 
 function onData(err, res, data, layoutName, gameName) {
     if(!err) {
-        /*
-        if(data.rows.length == 0 && gameName != null) {
-            res.redirect('/' + gameName);
-            return;
-        }
-        */
-        //console.log(data.rows);
         renderPage(res, 'home', {layout: layoutName, posts: data.rows});
     }
     else {
