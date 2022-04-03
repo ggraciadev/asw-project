@@ -9,19 +9,33 @@
             <a href="{{post.url}}">
                 <h1 id="tituloItem">{{titleURL post.title post.url}}</h1>
             </a>
-            <span id="subtitulo">{{post.likes}} points by {{post.username}} {{prettifyDate post.creationTime}} | flag | hide | </span>
+            <span id="subtitulo">{{post.likes}} points by {{post.username}} {{prettifyDate post.creationTime}} | flag | hide | 
             <a id="subtitulo">{{post.commentsNum}} comments</a>
+            </span>
             <p id="text">{{post.msg}}</p>
             <form method="post" action="">
                 <textarea name="text" rows="8" cols="80"></textarea>
                 <br>
-                <input type="submit" value="submit comment">
+                <input type="submit" value="add comment">
             </form>
             
             {{#each post.comments}}
-                <div id="comment">
-                    <span id="subtitulo"> Text: {{message}}, author: {{author}}, created at {{prettifyDate creationTime}}</span>
-                    <p id="text">{{msg}}</p>
+
+                <br>
+                <div>
+                    {{!--
+                    https://ibb.co/HHLs1Yx Empty 
+                    https://ibb.co/z7bp3q5 Filled 
+                    --}}
+                    <script src="/controllers/postController.js"></script>
+
+                    <span id="subtitulo">
+                        <img id="likeButton" src="resources/empty_heart.png" {{!-- onclick='likeComment({{id}})' --}}/>    
+                        <a style="color: #828282" {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{author}} {{prettifyDate creationTime}}</a>
+                        | prev | next [-]
+                    </span>
+                    <p id = "comment">{{message}}</p>
+                    <a id = "reply" href={{getReply postID id}}>reply</a>
                 </div>
             {{/each}}
 

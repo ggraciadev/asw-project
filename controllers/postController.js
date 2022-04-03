@@ -19,6 +19,11 @@ const createPostObj = async (row, withComments) => {
     return obj;
 }
 
+/* async function likeComment(commentId){
+    let q = "update COMMENTS set likes = likes + 1 where id = " + commentId;
+    await db.query(q);
+} */
+
 const getAll = async (orderBy) => {
     try {
 

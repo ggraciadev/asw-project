@@ -96,6 +96,11 @@ function errorHandler (err, req, res, next) {
     res.end('error '+ err);
 }
 
+async function likeComment(commentId){
+    let q = "update COMMENTS set likes = likes + 1 where id = " + commentId;
+    await db.query(q);
+}
+
 app.engine('handlebars', exphbs({
     defaultLayout: 'blog',
     helpers: {
@@ -150,6 +155,9 @@ app.engine('handlebars', exphbs({
                 return title;
             }
             return title + " (" + url + ")";
+        },
+        getReply: function(postid, id) {
+            return "/reply?postid=" + postid + "&commentid=" + id;
         },
     }
 }));
