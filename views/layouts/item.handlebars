@@ -6,6 +6,11 @@
         <br>
         <div id="mainDiv">
             {{{body}}}
+            {{!-- {{#each comments}}
+                    <div id="comment">
+                        <span id="subtitulo"> Text: {{message}}, author: {{author}}, created at {{prettifyDate creationtime}}</span>
+                        <p id="text">{{msg}}</p>
+            {{/each}} --}}
             {{#each posts}}
                 <a href="{{url}}">
                     <h1 id="tituloItem">{{titleURL title url}}</h1>
@@ -18,6 +23,14 @@
                     <br>
                     <input type="submit" value="submit comment">
                 </form>
+                
+                
+
+                    {{!-- <div id="comment">
+                        <span>Text: {{message}}, author: {{author}}, created at {{prettifyDate creationtime}}</span>
+                    </div> --}}
+
+                
 
 
                 {{!-- esto lo he copiado vilmente de HN xd --}}
@@ -32,6 +45,7 @@
                     <input type="text" name="q" value="" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="false"></form>
                 </center>
             {{/each}}
+            
             <br>
         </div>
     </body>

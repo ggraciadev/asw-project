@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-exports.query = function(query, params, callback, originalRes, layoutName, gameName) {
+exports.query = function(query, params, callback, originalRes, layoutName) {
     console.log("DB QUERY");
     //const connectionString = "postgres://ulxouuifxljact:a29ff5ec3cb4ead4b7b8c92c2f01367eaeedb9325fe51d4a194ff3304803f9d8@ec2-63-34-223-144.eu-west-1.compute.amazonaws.com:5432/dbj733ha962jhl";
     const client = new Client({
@@ -26,8 +26,8 @@ exports.query = function(query, params, callback, originalRes, layoutName, gameN
             console.log(err.stack)
             callback(err, originalRes);
         } else {
-            console.log(params);
-            callback(err, originalRes, res, layoutName, gameName);
+            
+            callback(err, originalRes, res, layoutName);
             client.end(); 
         }
     });

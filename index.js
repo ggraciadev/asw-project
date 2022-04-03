@@ -5,7 +5,7 @@ var bodyParser = require("body-parser");
 const path = require ('path');
 const app = express();
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 
 app.engine('handlebars', exphbs({
     defaultLayout: 'blog',
@@ -85,6 +85,7 @@ app.get('/newest', function(req, res) {
     [], onData, res, 'main');
 });
 
+
 app.get('/submit', function(req, res) {
     renderPage(res, 'home', {layout: 'submit'});
 });
@@ -96,12 +97,7 @@ app.post('/submit', function(req, res) {
     let username = 'tortuga';
     let creationTime = new Date().toISOString();
     let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
-        "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
-
-
-    console.log("title: " + title);
-    console.log("msg: " + msg);
-    console.log("url: " + url);
+    "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
     if(title === undefined || title === ""){
         //Aqui va una alerta en texto
         console.log("Title needed");
@@ -118,57 +114,40 @@ app.post('/submit', function(req, res) {
         res.redirect('/submit');
     }
     else {
-        db.query(q, [], onPost, res, 'main');
+        db.query(q, [], onPost, res, 'item');
     }
-    
-    /*db.query("insert into X(x, y, z) values ('" + req.body.X + "', '" + req.body.Y + 
-    "', " + req.body.Z + ");", [], onData, res, 'home');*/
 });
 
 app.post('/item', function(req, res) {
-    console.log(req.body.text);
-    /* let msg = req.body.text;
-    let username = 'tortuga';
+    let postId = req.query.id;
+    let author = 'tortuga';
     let creationTime = new Date().toISOString();
-    let q = "insert into COMMENTS(title, msg, url, username, creationTime) values ('" + title + 
-        "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
-
-
-    console.log("title: " + title);
-    console.log("msg: " + msg);
-    console.log("url: " + url);
-    if(title === undefined || title === ""){
-        //Aqui va una alerta en texto
-        console.log("Title needed");
-        res.redirect('/submit');
-    }
-    else if(url === "" && msg === undefined){
-        //Aqui va una alerta en texto
-        console.log("MSG or URL needed1");
-        res.redirect('/submit');
-    }
-    else if(url !== "" && msg !== ""){
-        //Aqui va una alerta en texto
-        console.log("MSG or URL needed2");
-        res.redirect('/submit');
-    }
-    else {
-        db.query(q, [], onPost, res, 'main');
-    } */
+    let message = req.body.text;
     
-    /*db.query("insert into X(x, y, z) values ('" + req.body.X + "', '" + req.body.Y + 
-    "', " + req.body.Z + ");", [], onData, res, 'home');*/
+    let q = "insert into COMMENTS(postid, author, creationtime, message) values ('" + postId + 
+    "', '" + author + "', '" + creationTime + "', '" + message + "')"; 
+    
+    db.query(q, [], onPost, res, 'item');
 });
+
+app.get('/item', function(req, res) {
+    let id = req.query.id;
+    //db.query("select * from Post where id=" + id + ";", [], onData, res, 'item');
+    db.query("select * from Comments where postid=" + id + " order by creationTime desc;", [], onDataComment, res, 'item');
+    
+});
+
+/* app.get('/item', function (req,res) {
+    //let id = 57;
+    let id = req.query.id;
+    db.query("select * from Post where id="+id+";", [], onData, res, 'item');
+});
+ */
 
 app.get('/500', function (req,res) {
     res.end('Error 500: Server error.');
 });
 
-app.get('/item', function (req,res) {
-    //let id = 57;
-    let id = req.url.match(/id=(.*)/)[1];
-    db.query("select * from Post where id="+id+";", [], onData, res, 'item');
-});
 
 app.get("*", function(req, res) {
     res.status(404);
@@ -179,7 +158,8 @@ function errorHandler (err, req, res, next) {
     res.end('error '+ err);
 }
 
-function onData(err, res, data, layoutName, gameName) {
+function onData(err, res, data, layoutName) {
+    //console.log(data.rows);
     if(!err) {
         renderPage(res, 'home', {layout: layoutName, posts: data.rows});
     }
@@ -190,15 +170,26 @@ function onData(err, res, data, layoutName, gameName) {
     }
 }
 
-function onPost(err, res, data, layoutName, gameName) {
+function noHagoNada(err, res, data, layoutName){
+    console.log(data.rows);
+}
+
+function onDataComment(err, res, data, layoutName) {
+    db.query("select * from post where id=" + data.rows[0].postid + " order by creationTime desc;", [], noHagoNada, res, 'item');
+
     if(!err) {
-        /*
-        if(data.rows.length == 0 && gameName != null) {
-            res.redirect('/' + gameName);
-            return;
-        }
-        */
-        //console.log(data.rows);
+        renderPage(res, 'home', {layout: layoutName, comments: data.rows});
+    }
+    else {
+        res.status(500);
+        res.redirect('/500');
+        console.log("Error 500");
+    }
+}
+
+
+function onPost(err, res, data, layoutName) {
+    if(!err) {
         res.redirect('/');
     }
     else {
