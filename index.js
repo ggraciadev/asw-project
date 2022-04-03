@@ -4,20 +4,110 @@ var exphbs  = require('express-handlebars');
 var bodyParser = require("body-parser");
 const path = require ('path');
 const app = express();
+const postController = require('./controllers/postController');
 
 const PORT = process.env.PORT || 5000;
+
+app.set('view engine', 'handlebars');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(errorHandler);
+app.use(express.static(path.join(__dirname, '/public')))
+
+function renderPage(res, view, layoutInfo) {
+    res.render(view, layoutInfo);
+}
+
+app.get('/', async function(req, res) {
+    //console.log("holi");
+    const result = await postController.getAll("likes");
+    renderPage(res, 'home', {layout: 'main', posts: result});
+
+});
+
+app.get('/newest', async function(req, res) {
+    const result = await postController.getAll("creationtime");
+    renderPage(res, 'home', {layout: 'main', posts: result});
+});
+
+app.get('/submit', async function(req, res) {
+    renderPage(res, 'home', {layout: 'submit'});
+});
+
+app.post('/submit', async function(req, res) {
+    let title = req.body.title.trim();
+    let url = req.body.url.trim();
+    let msg = req.body.msg;
+    let username = 'tortuga';
+    let creationTime = new Date().toISOString();
+    let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
+    "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
+    if(title === undefined || title === ""){
+        //Aqui va una alerta en texto
+        console.log("Title needed");
+        res.redirect('/submit');
+    }
+    else if(url === "" && msg === undefined){
+        //Aqui va una alerta en texto
+        console.log("MSG or URL needed1");
+        res.redirect('/submit');
+    }
+    else if(url !== "" && msg !== ""){
+        //Aqui va una alerta en texto
+        console.log("MSG or URL needed2");
+        res.redirect('/submit');
+    }
+    else {
+        await db.query(q);
+        res.redirect('/newest');
+    }
+});
+
+app.get('/item', async function(req, res) {
+    let id = req.query.id;
+    const result = await postController.getById(id);
+    renderPage(res, 'home', {layout: 'item', post: result});
+
+});
+
+app.post('/item', async function(req, res) {
+    let postId = req.query.id;
+    let author = 'tortuga';
+    let creationTime = new Date().toISOString();
+    let message = req.body.text;
+    
+    let q = "insert into COMMENTS(postid, author, creationtime, message) values ('" + postId + 
+    "', '" + author + "', '" + creationTime + "', '" + message + "')"; 
+    
+    await db.query(q);
+    res.redirect("/item?id=" + postId);
+    
+});
+
+
+app.get('/home', async function(req, res) {
+    res.redirect('/');
+});
+
+app.get('/500', function (req,res) {
+    res.end('Error 500: Server error.');
+});
+ 
+function errorHandler (err, req, res, next) {
+    res.end('error '+ err);
+}
 
 app.engine('handlebars', exphbs({
     defaultLayout: 'blog',
     helpers: {
         prettifyDate: function(timeStamp) {
             let d = new Date(timeStamp);
+            d.setHours(d.getHours()+2);
             let dNow = new Date();
 
             let result = Math.abs(dNow - d) / 1000 / 3600;
 
             if(result < 0.01) {
-                return "Just now";
+                return "just now";
             }
             else if(result < 1) {
                 let temp = (result * 60).toFixed(0);
@@ -63,144 +153,5 @@ app.engine('handlebars', exphbs({
         },
     }
 }));
-
-app.set('view engine', 'handlebars');
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(errorHandler);
-app.use(express.static(path.join(__dirname, '/public')))
-
-app.get('/', function(req, res) {
-    db.query("select * from Post order by likes desc;", 
-    [], onData, res, 'main');
-    //res.end('Pagina principal ordenada por likes');
-
-});
-
-app.get('/home', function(req, res) {
-    res.redirect('/');
-});
-
-app.get('/newest', function(req, res) {
-    db.query("select * from Post order by creationTime desc;", 
-    [], onData, res, 'main');
-});
-
-
-app.get('/submit', function(req, res) {
-    renderPage(res, 'home', {layout: 'submit'});
-});
-
-app.post('/submit', function(req, res) {
-    let title = req.body.title.trim();
-    let url = req.body.url.trim();
-    let msg = req.body.msg;
-    let username = 'tortuga';
-    let creationTime = new Date().toISOString();
-    let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
-    "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
-    if(title === undefined || title === ""){
-        //Aqui va una alerta en texto
-        console.log("Title needed");
-        res.redirect('/submit');
-    }
-    else if(url === "" && msg === undefined){
-        //Aqui va una alerta en texto
-        console.log("MSG or URL needed1");
-        res.redirect('/submit');
-    }
-    else if(url !== "" && msg !== ""){
-        //Aqui va una alerta en texto
-        console.log("MSG or URL needed2");
-        res.redirect('/submit');
-    }
-    else {
-        db.query(q, [], onPost, res, 'item');
-    }
-});
-
-app.post('/item', function(req, res) {
-    let postId = req.query.id;
-    let author = 'tortuga';
-    let creationTime = new Date().toISOString();
-    let message = req.body.text;
-    
-    let q = "insert into COMMENTS(postid, author, creationtime, message) values ('" + postId + 
-    "', '" + author + "', '" + creationTime + "', '" + message + "')"; 
-    
-    db.query(q, [], onPost, res, 'item');
-});
-
-app.get('/item', function(req, res) {
-    let id = req.query.id;
-    //db.query("select * from Post where id=" + id + ";", [], onData, res, 'item');
-    db.query("select * from Comments where postid=" + id + " order by creationTime desc;", [], onDataComment, res, 'item');
-    
-});
-
-/* app.get('/item', function (req,res) {
-    //let id = 57;
-    let id = req.query.id;
-    db.query("select * from Post where id="+id+";", [], onData, res, 'item');
-});
- */
-
-app.get('/500', function (req,res) {
-    res.end('Error 500: Server error.');
-});
-
-
-app.get("*", function(req, res) {
-    res.status(404);
-    res.end('Error 404: Not found.');
-});
- 
-function errorHandler (err, req, res, next) {
-    res.end('error '+ err);
-}
-
-function onData(err, res, data, layoutName) {
-    //console.log(data.rows);
-    if(!err) {
-        renderPage(res, 'home', {layout: layoutName, posts: data.rows});
-    }
-    else {
-        res.status(500);
-        res.redirect('/500');
-        console.log("Error 500");
-    }
-}
-
-function noHagoNada(err, res, data, layoutName){
-    console.log(data.rows);
-}
-
-function onDataComment(err, res, data, layoutName) {
-    db.query("select * from post where id=" + data.rows[0].postid + " order by creationTime desc;", [], noHagoNada, res, 'item');
-
-    if(!err) {
-        renderPage(res, 'home', {layout: layoutName, comments: data.rows});
-    }
-    else {
-        res.status(500);
-        res.redirect('/500');
-        console.log("Error 500");
-    }
-}
-
-
-function onPost(err, res, data, layoutName) {
-    if(!err) {
-        res.redirect('/');
-    }
-    else {
-        res.status(500);
-        res.redirect('/500');
-        console.log("Error 500");
-    }
-}
-
-function renderPage(res, view, layoutInfo) {
-    res.render(view, layoutInfo);
-}
 
 app.listen(PORT);
