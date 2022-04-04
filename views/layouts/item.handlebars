@@ -18,19 +18,18 @@
                 <br>
                 <input type="submit" value="add comment">
             </form>
-            
+            <button onclick="{{hello}}">Click me</button>
             {{#each post.comments}}
-
                 <br>
                 <div>
-                    {{!--
-                    https://ibb.co/HHLs1Yx Empty 
-                    https://ibb.co/z7bp3q5 Filled 
-                    --}}
-                    <script src="/controllers/postController.js"></script>
-
                     <span id="subtitulo">
-                        <img id="likeButton" src="resources/empty_heart.png" {{!-- onclick='likeComment({{id}})' --}}/>    
+                        <a href="/voteComment?id={{id}}&postid={{postID}}">
+                            {{#if userLiked}}
+                                <img id="likeButton" src="resources/filled_heart.png">
+                            {{else}}
+                                <img id="likeButton" src="resources/empty_heart.png">
+                            {{/if}}
+                        </a>
                         <a style="color: #828282" {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{author}} {{prettifyDate creationTime}}</a>
                         | prev | next [-]
                     </span>
@@ -46,7 +45,6 @@
                 
 
 
-                {{!-- esto lo he copiado vilmente de HN xd --}}
                 <center><span><a id=botLinks href="">Guidelines</a>
                     | <a id=botLinks href="">FAQ</a>
                     | <a id=botLinks href="">Lists</a>

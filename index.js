@@ -5,6 +5,7 @@ var bodyParser = require("body-parser");
 const path = require ('path');
 const app = express();
 const postController = require('./controllers/postController');
+const userController = require('./controllers/userController');
 
 const PORT = process.env.PORT || 5000;
 
@@ -18,7 +19,6 @@ function renderPage(res, view, layoutInfo) {
 }
 
 app.get('/', async function(req, res) {
-    //console.log("holi");
     const result = await postController.getAll("likes");
     renderPage(res, 'home', {layout: 'main', posts: result});
 
@@ -43,24 +43,52 @@ app.post('/submit', async function(req, res) {
     "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
     if(title === undefined || title === ""){
         //Aqui va una alerta en texto
-        console.log("Title needed");
+        console.log("Case1");
         res.redirect('/submit');
     }
     else if(url === "" && msg === undefined){
         //Aqui va una alerta en texto
-        console.log("MSG or URL needed1");
+        console.log("Case2");
         res.redirect('/submit');
     }
     else if(url !== "" && msg !== ""){
-        //Aqui va una alerta en texto
-        console.log("MSG or URL needed2");
-        res.redirect('/submit');
+        //Crear post con url y el mensaje como comment. 
+        let urlPost = await postController.getByURL(url);
+        
+        if(urlPost === null){
+            q = "insert into POST(title, url, username, creationTime) values ('" + title + 
+            "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
+            await db.query(q);
+            let post = await postController.getByURL(url);
+            console.log("post: " + post);
+            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + post.id + 
+            "', '" + username + "', '" + creationTime + "', '" + msg + "')"; 
+            await db.query(q2);
+            res.redirect('/item?id=' + post.id);
+        }
+        else {
+            res.redirect('/item?id=' + urlPost.id);
+        }
+        console.log("Case3");
     }
     else {
-        await db.query(q);
-        res.redirect('/newest');
+        let urlPost = await postController.getByURL(url);
+        console.log("urlPost: " + urlPost);
+        if(urlPost === null){
+            let post = await db.query(q);
+            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + post.id + 
+            "', '" + username + "', '" + creationTime + "', '" + msg + "')"; 
+            await db.query(q2);
+            res.redirect('/item?id=' + post.id);
+        }
+        else {
+            console.log("Potato: " + urlPost);
+            res.redirect('/item?id=' + urlPost.id);
+        }
+        console.log("Case4");
     }
 });
+
 
 app.get('/item', async function(req, res) {
     let id = req.query.id;
@@ -91,14 +119,19 @@ app.get('/home', async function(req, res) {
 app.get('/500', function (req,res) {
     res.end('Error 500: Server error.');
 });
+
+app.get('/votePost', async function(req, res) {
+    await userController.likePost(req.query.id);
+    res.redirect('back');
+});
+
+app.get('/voteComment', async function(req, res) {
+    await userController.likeComment(req.query.id);
+    res.redirect('/item?id=' + req.query.postid);
+});
  
 function errorHandler (err, req, res, next) {
     res.end('error '+ err);
-}
-
-async function likeComment(commentId){
-    let q = "update COMMENTS set likes = likes + 1 where id = " + commentId;
-    await db.query(q);
 }
 
 app.engine('handlebars', exphbs({

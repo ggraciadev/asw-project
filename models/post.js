@@ -1,7 +1,5 @@
-const Comments = require("./comment.js");
-
 module.exports = class Post {
-    constructor (_id, _title, _url, _msg, _likes, _username, _creationTime, _commentsNum) {
+    constructor (_id, _title, _url, _msg, _likes, _username, _creationTime, _commentsNum, _userLiked) {
       this.id = _id;
       this.title = _title;
       this.url = _url;
@@ -10,6 +8,7 @@ module.exports = class Post {
       this.username = _username;
       this.creationTime = _creationTime;
       this.commentsNum = _commentsNum;
+      this.userLiked = _userLiked;
       this.comments = [];
     }
 }

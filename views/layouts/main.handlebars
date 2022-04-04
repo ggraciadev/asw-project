@@ -9,7 +9,13 @@
             {{#each posts}}
                 <br>
                 <span id = "likeandtitle">
-                    <img id="likeButton" src="resources/empty_heart.png" {{!-- onclick='likeComment({{id}})' --}}/>
+                    <a href="/votePost?id={{id}}">
+                            {{#if userLiked}}
+                                <img id="likeButton" src="resources/filled_heart.png">
+                            {{else}}
+                                <img id="likeButton" src="resources/empty_heart.png">
+                            {{/if}}
+                    </a>
                     <a href="{{url}}">
                         <h1 id="titulo">{{math @index "+" 1}}. {{titleURL title url}}</h1>
                     </a>
