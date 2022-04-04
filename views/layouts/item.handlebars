@@ -18,7 +18,6 @@
                 <br>
                 <input type="submit" value="add comment">
             </form>
-            <button onclick="{{hello}}">Click me</button>
             {{#each post.comments}}
                 <br>
                 <div>
@@ -36,6 +35,7 @@
                     <p id = "comment">{{message}}</p>
                     <a id = "reply" href={{getReply postID id}}>reply</a>
                 </div>
+                
             {{/each}}
 
                     {{!-- <div id="comment">

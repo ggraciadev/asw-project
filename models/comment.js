@@ -8,5 +8,6 @@ module.exports = class Comment {
       this.message = _message;
       this.likes = _likes;
       this.userLiked = _userLiked;
+      this.comments = [];
     }
 }
