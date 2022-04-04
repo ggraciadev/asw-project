@@ -19,31 +19,8 @@
                 <input type="submit" value="add comment">
             </form>
             {{#each post.comments}}
-                <br>
-                <div>
-                    <span id="subtitulo">
-                        <a href="/voteComment?id={{id}}&postid={{postID}}">
-                            {{#if userLiked}}
-                                <img id="likeButton" src="resources/filled_heart.png">
-                            {{else}}
-                                <img id="likeButton" src="resources/empty_heart.png">
-                            {{/if}}
-                        </a>
-                        <a style="color: #828282" {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{author}} {{prettifyDate creationTime}}</a>
-                        | prev | next [-]
-                    </span>
-                    <p id = "comment">{{message}}</p>
-                    <a id = "reply" href={{getReply postID id}}>reply</a>
-                </div>
-                
+                {{> partialComment}}
             {{/each}}
-
-                    {{!-- <div id="comment">
-                        <span>Text: {{message}}, author: {{author}}, created at {{prettifyDate creationtime}}</span>
-                    </div> --}}
-
-                
-
 
                 <center><span><a id=botLinks href="">Guidelines</a>
                     | <a id=botLinks href="">FAQ</a>

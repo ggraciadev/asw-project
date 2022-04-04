@@ -4,29 +4,22 @@ const {Post, Comment} = require("../models");
 
 
 const createCommentTreeRec = (comments, comment) => {
-    let result = [];
     for(let i = 0; i < comments.length; i++) {
         if(comments[i].parentID === comment.id && comments[i].id !== comment.id) {
-            comments[i].comments.push(createCommentTreeRec(comments, comments[i]));
-            result.push(comments[i]);
+            comment.comments.push(createCommentTreeRec(comments, comments[i]));
         }
-    }/* 
-    console.log("Rec");
-    console.log(result); */
-    return result;
+    }
+    return comment;
 }
 
 const createCommentTree = (comments) => {
     let result = [];
     for(let i = 0; i < comments.length; ++i) {
-        console.log(comments[i]);
-        if(comments[i].parentID === null) {
-            comments[i].comments.push(createCommentTreeRec(comments, comments[i]));
+        if(comments[i].parentID === null)  {
+            comments[i] = (createCommentTreeRec(comments, comments[i]));
             result.push(comments[i]);
         }
-    }/* 
-    console.log("Tree");
-    console.log(result); */
+    }
     return result;
 }
 
@@ -43,13 +36,10 @@ const createPostObj = async (row, withComments) => {
             let temp = new Comment(rows[i].id, rows[i].postid, rows[i].author, rows[i].creationtime, rows[i].parentid, rows[i].message, rows[i].likes, rows[i].userliked);
             allComments.push(temp);
         }
-
         let treeComments = createCommentTree(allComments);
         for(let i = 0; i < treeComments.length; ++i) {
             obj.comments.push(treeComments[i]);
         }
-        console.log(obj);
-        obj.commentsNum = obj.comments.length;
     }
     return obj;
 }
