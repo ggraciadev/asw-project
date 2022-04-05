@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <br>
+        <div id="mainDiv">
+            {{{body}}}
+            {{#each post.comments}}
+                <span id="subtitulo">
+                    <a href="/voteComment?id={{id}}&postid={{postID}}">
+                        {{#if userLiked}}
+                            <img id="likeButton" src="resources/filled_heart.png">
+                        {{else}}
+                            <img id="likeButton" src="resources/empty_heart.png">
+                        {{/if}}
+                    </a>
+                    <span id="subtitulo">
+                        <a {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{author}} {{prettifyDate creationTime}}</a>
+                        <a style="color: #828282" href="{{url}}">| parent </a>
+                        <a style="color: #828282" href="{{url}}">| context </a>
+                        | flag | on : 
+                        <a style="color: #828282" href="{{url}}">{{title}}</a>
+                    </span>
+                </span>
+                <p id = "comment">{{message}}</p>
+                <br>
+                <form id="form" action ="" method="post">
+                    <textarea style="width: 610px" name="text" rows="8" cols="80"></textarea>
+                    <br>
+                    <input style="width: 55px" id="replyButton" type="submit" value="reply">
+                </form>
+            {{/each}}
+            <br>
+        </div>
+    </body>
+</html>

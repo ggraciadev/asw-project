@@ -114,6 +114,13 @@ a{text-decoration: none;}
     text-decoration: underline;
 }
 
+#replyButton {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 11px;
+    margin-top: 2px;
+    padding: 2px 7px;
+}
+
 
 #titleText {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -137,6 +144,12 @@ a{text-decoration: none;}
     color: #828282;
     align-items: center;
     text-decoration: none;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    margin-left: 22px;
 }
 
 .topbarItem {

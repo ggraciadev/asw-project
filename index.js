@@ -7,6 +7,7 @@ const app = express();
 const postController = require('./controllers/postController');
 const userController = require('./controllers/userController');
 
+
 const PORT = process.env.PORT || 5000;
 
 app.set('view engine', 'handlebars');
@@ -16,10 +17,11 @@ app.use(express.static(path.join(__dirname, '/public')))
 
 function renderPage(res, view, layoutInfo) {
     res.render(view, layoutInfo);
-}
+};
 
 app.get('/', async function(req, res) {
     const result = await postController.getAll("likes");
+    //await postController.getAllCommentsByUsername('tortuga');
     renderPage(res, 'home', {layout: 'main', posts: result});
 
 });
@@ -27,6 +29,18 @@ app.get('/', async function(req, res) {
 app.get('/newest', async function(req, res) {
     const result = await postController.getAll("creationtime");
     renderPage(res, 'home', {layout: 'main', posts: result});
+});
+
+app.get('/ask', async function(req, res) {
+    const result = await postController.getAllAsk("likes");
+    renderPage(res, 'home', {layout: 'main', posts: result});
+});
+
+app.get('/threads', async function(req, res) {
+    res.redirect('/');
+    //let username = req.query.username;
+    //const result = await postController.getAllComments(username);
+    //renderPage(res, 'home', {layout: 'threads', posts: result});
 });
 
 app.get('/submit', async function(req, res) {
@@ -108,7 +122,28 @@ app.post('/item', async function(req, res) {
     
     await db.query(q);
     res.redirect("/item?id=" + postId);
+});
+
+
+app.get('/reply', async function(req, res) {
+    let postid = req.query.postid;
+    let commentid = req.query.commentid;
+    const result = await postController.getByIdWithOneComment(postid, commentid);
+    renderPage(res, 'home', {layout: 'reply', post: result});
+});
+
+app.post('/reply', async function(req, res) {
+    let postId = req.query.postid;
+    let author = 'tortuga';
+    let creationTime = new Date().toISOString();
+    let parentId = req.query.commentid;
+    let message = req.body.text;
     
+    let q = "insert into COMMENTS(postid, author, creationtime, parentid, message) values ('" + postId + 
+    "', '" + author + "', '" + creationTime + "', '" + parentId + "', '" + message + "')"; 
+    
+    await db.query(q);
+    res.redirect("/item?id=" + postId);
 });
 
 
@@ -135,7 +170,7 @@ function errorHandler (err, req, res, next) {
 }
 
 app.engine('handlebars', exphbs({
-    defaultLayout: 'blog',
+    defaultLayout: 'main',
     helpers: {
         prettifyDate: function(timeStamp) {
             let d = new Date(timeStamp);
@@ -188,6 +223,12 @@ app.engine('handlebars', exphbs({
                 return title;
             }
             return title + " (" + url + ")";
+        },
+        titleOrURL: function(id, url) {
+            if(url === ""){
+                return ("/item?id=" + id);
+            }
+            return url;
         },
         getReply: function(postid, id) {
             return "/reply?postid=" + postid + "&commentid=" + id;

@@ -16,7 +16,7 @@
                                 <img id="likeButton" src="resources/empty_heart.png">
                             {{/if}}
                     </a>
-                    <a href="{{url}}">
+                    <a href="{{titleOrURL id url}}">
                         <h1 id="titulo">{{math @index "+" 1}}. {{titleURL title url}}</h1>
                     </a>
                 </span>
@@ -24,6 +24,17 @@
                 <a id="subtitulo" href="item?id={{id}}"> {{commentsNum}} comments</a> </span>   
                 <br>
             {{/each}}
+            <br>
+            <center><span><a id=botLinks href="">Guidelines</a>
+                    | <a id=botLinks href="">FAQ</a>
+                    | <a id=botLinks href="">Lists</a>
+                    | <a id=botLinks href="">API</a>
+                    | <a id=botLinks href="">Security</a>
+                    | <a id=botLinks href="">Legal</a>
+                    | <a id=botLinks href="">Apply to YC</a>
+                    | <a id=botLinks href="">Contact</a></span><br><br><form>Search:
+                    <input type="text" name="q" value="" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="false"></form>
+                </center>
             <br>
         </div>
     </body>

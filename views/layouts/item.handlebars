@@ -6,22 +6,24 @@
         <br>
         <div id="mainDiv">
             {{{body}}}
-            <a href="{{post.url}}">
+            <div style="margin-left: 22px">
+                <a href="{{post.url}}">
                 <h1 id="tituloItem">{{titleURL post.title post.url}}</h1>
-            </a>
-            <span id="subtitulo">{{post.likes}} points by {{post.username}} {{prettifyDate post.creationTime}} | flag | hide | 
-            <a id="subtitulo">{{post.commentsNum}} comments</a>
-            </span>
-            <p id="text">{{post.msg}}</p>
-            <form method="post" action="">
-                <textarea name="text" rows="8" cols="80"></textarea>
-                <br>
-                <input type="submit" value="add comment">
-            </form>
+                </a>
+                <span id="subtitulo">{{post.likes}} points by {{post.username}} {{prettifyDate post.creationTime}} | flag | hide | 
+                <a id="subtitulo">{{post.commentsNum}} comments</a>
+                </span>
+                <p id="text">{{post.msg}}</p>
+                <form style="margin-left: 22px" method="post" action="">
+                    <textarea name="text" rows="8" cols="80"></textarea>
+                    <br>
+                    <input type="submit" value="add comment">
+                </form>
+            </div>
+            
             {{#each post.comments}}
                 {{> partialComment}}
             {{/each}}
-
                 <center><span><a id=botLinks href="">Guidelines</a>
                     | <a id=botLinks href="">FAQ</a>
                     | <a id=botLinks href="">Lists</a>
@@ -32,8 +34,6 @@
                     | <a id=botLinks href="">Contact</a></span><br><br><form>Search:
                     <input type="text" name="q" value="" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="false"></form>
                 </center>
-            
-            
             <br>
         </div>
     </body>

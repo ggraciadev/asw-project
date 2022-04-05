@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <div id="mainDiv">
+            {{{body}}}
+            {{#each posts}}
+                <span id="subtitulo">
+                    <a href="/voteComment?id={{id}}&postid={{postID}}">
+                        {{#if userLiked}}
+                            <img id="likeButton" src="resources/filled_heart.png">
+                        {{else}}
+                            <img id="likeButton" src="resources/empty_heart.png">
+                        {{/if}}
+                    </a>
+                    <span id="subtitulo">
+                        <a {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{author}} {{prettifyDate creationTime}}</a>
+                        <a style="color: #828282" href="{{url}}">| parent </a>
+                        <a style="color: #828282" href="{{url}}">| context </a>
+                        | flag | on : 
+                        <a style="color: #828282" href="{{url}}">{{title}}</a>
+                    </span>
+                </span>
+                <p id = "comment">{{message}}</p>
+                {{#each post.comments}}
+                    {{> partialComment}}
+                {{/each}}
+            {{/each}}
+        </div>
+    </body>
+</html>
