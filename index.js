@@ -37,10 +37,10 @@ app.get('/ask', async function(req, res) {
 });
 
 app.get('/threads', async function(req, res) {
-    res.redirect('/');
-    //let username = req.query.username;
-    //const result = await postController.getAllComments(username);
-    //renderPage(res, 'home', {layout: 'threads', posts: result});
+    let username = req.query.username;
+    const result = await postController.getAllCommentsByUsername(username);
+    console.log(result);
+    renderPage(res, 'home', {layout: 'threads', posts: result});
 });
 
 app.get('/submit', async function(req, res) {
@@ -162,7 +162,7 @@ app.get('/votePost', async function(req, res) {
 
 app.get('/voteComment', async function(req, res) {
     await userController.likeComment(req.query.id);
-    res.redirect('/item?id=' + req.query.postid);
+    res.redirect('back');
 });
  
 function errorHandler (err, req, res, next) {

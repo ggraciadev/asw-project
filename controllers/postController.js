@@ -96,7 +96,9 @@ const getAllAsk = async (orderBy) => {
 const getAllCommentsByUsername = async (username) => {
     try {
         const result = [];
-        const q = await db.query("select * from comments where author = '"+ username +"';");
+        const q = await db.query("select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where 'tortuga' in (select l.username from likecomment l where l.commentid = c.id)" +
+        "union select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 0 as userLiked from comments c where 'tortuga' not in (select l.username from likecomment l where l.commentid = c.id) order by creationtime desc;");
+        //const q = await db.query("select * from comments where author = '"+ username +"';");
         let rows = q.rows;
         let allComments = [];
         for(let i = 0; i < rows.length; ++i) {
@@ -107,7 +109,7 @@ const getAllCommentsByUsername = async (username) => {
         for(let i = 0; i < treeComments.length; ++i) {
             result.push(treeComments[i]);
         }
-        console.log(result);
+        return result;
     }
     catch (error) {
         console.log(error);

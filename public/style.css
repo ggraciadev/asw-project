@@ -177,3 +177,7 @@ a{text-decoration: none;}
     width: 80.67%;
     background-color: #f6f6ef;
 }
+
+#threadsDiv {
+    margin-left: 22px;
+}

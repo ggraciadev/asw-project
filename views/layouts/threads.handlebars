@@ -1,31 +1,31 @@
+
+ 
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <title>FIBer News</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id="mainDiv">
             {{{body}}}
             {{#each posts}}
-                <span id="subtitulo">
-                    <a href="/voteComment?id={{id}}&postid={{postID}}">
-                        {{#if userLiked}}
-                            <img id="likeButton" src="resources/filled_heart.png">
-                        {{else}}
-                            <img id="likeButton" src="resources/empty_heart.png">
-                        {{/if}}
-                    </a>
+                <div id="threadsDiv">
+                    <br>
                     <span id="subtitulo">
-                        <a {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{author}} {{prettifyDate creationTime}}</a>
-                        <a style="color: #828282" href="{{url}}">| parent </a>
-                        <a style="color: #828282" href="{{url}}">| context </a>
-                        | flag | on : 
-                        <a style="color: #828282" href="{{url}}">{{title}}</a>
+                        <a style="color: #828282" {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{likes}} points by {{author}} {{prettifyDate creationTime}}</a>
+                        | prev | next [-]
                     </span>
-                </span>
-                <p id = "comment">{{message}}</p>
-                {{#each post.comments}}
-                    {{> partialComment}}
-                {{/each}}
+                    <p id = "comment">{{message}}</p>
+                    <a id = "reply" href={{getReply postID id}}>reply</a>
+                    <div id="subcomentarios">
+                        {{#each comments}}
+                            {{> partialComment}}
+                        {{/each}}
+                    </div>
+                </div>
+
             {{/each}}
         </div>
     </body>
