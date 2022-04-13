@@ -13,8 +13,11 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
-    "googleapis": "^100.0.0",
+    "express-session": "^1.17.2",
+    "googleapis": "^39.2.0",
     "handlebars-dateformat": "^1.1.2",
+    "passport": "^0.5.2",
+    "passport-google-oauth": "^2.0.0",
     "pg": "^8.7.3"
   }
 }

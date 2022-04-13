@@ -7,6 +7,8 @@ const app = express();
 const postController = require('./controllers/postController');
 const userController = require('./controllers/userController');
 
+const googleApi = require('./src/google-util');
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -19,10 +21,14 @@ function renderPage(res, view, layoutInfo) {
     res.render(view, layoutInfo);
 };
 
+app.get('/auth/google/callback', async function(req, res) {
+    googleApi.GetGoogleUserInfo(res);
+});
+
 app.get('/', async function(req, res) {
     const result = await postController.getAll("likes");
     //await postController.getAllCommentsByUsername('tortuga');
-    renderPage(res, 'home', {layout: 'main', posts: result});
+    renderPage(res, 'home', {layout: 'main', posts: result, googleURL: googleApi.GetGoogleURL()});
 
 });
 
