@@ -1,183 +1,191 @@
-a{text-decoration: none;}
+a {
+  text-decoration: none;
+}
 
 #topbar {
-    background-color: #ff6600;
-    text-align: left;
-    position: fixed; 
-    top: 0;
-    left: 10%;
-    width: 80%;
-    height: 4%;
+  background-color: #ff6600;
+  text-align: left;
+  position: fixed;
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 4%;
 }
 
 #topbarItemsContainer {
-    display: flex;
-    line-height: normal;
-    width: 100%;
-    height: 100%;
-    align-items: center;
+  display: flex;
+  line-height: normal;
+  width: 100%;
+  height: 100%;
+  align-items: center;
 }
 
 #titulo {
-    font-size: 13px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: black;
-    font-weight: 400;
+  font-size: 13px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: black;
+  font-weight: 400;
 }
 
 #tituloItem {
-    font-size: 13px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #828282;
-    margin-bottom: 0;
-    
-    font-weight: 400;
+  font-size: 13px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #828282;
+  margin-bottom: 0;
+
+  font-weight: 400;
 }
 
 #text {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #828282;    
-    font-size: 12px;
-    text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #828282;
+  font-size: 12px;
+  text-decoration: none;
 }
 
 #botLinks {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: black;    
-    font-size: 9px;
-    text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: black;
+  font-size: 9px;
+  text-decoration: none;
 }
 
-
-
 #inputGroup {
-    padding-top: 20px;
-    display: flex;
-    width: 390px;
-    justify-content: space-between;
-    color: gray;
-    text-decoration: none;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 13px;
-
+  padding-top: 20px;
+  display: flex;
+  width: 390px;
+  justify-content: space-between;
+  color: gray;
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
 }
 
 #subcomentarios {
-    width: 90%;
-    margin-left: 25px;
-    margin-right: auto;
+  width: 90%;
+  margin-left: 25px;
+  margin-right: auto;
 }
 
-#title, #url {
-    min-width: 350px;
+#title,
+#url {
+  min-width: 350px;
 }
 
 #submitButton {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 11px;
-    padding: 2px 7px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 11px;
+  padding: 2px 7px;
 }
 
 .botText {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: gray;
-    font-size: 13px;
-
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: gray;
+  font-size: 13px;
 }
 
 .image {
-    margin: 1px 5px;
-    border: 1px #ffffff solid;
+  margin: 1px 5px;
+  border: 1px #ffffff solid;
 }
 
 #likeButton {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-    margin-left: 2px;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  margin-left: 2px;
 }
 
 #comment {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #000000;    
-    font-size: 12px;
-    margin-left: 22px;
-    margin-bottom: 2px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #000000;
+  font-size: 12px;
+  margin-left: 22px;
+  margin-bottom: 2px;
 }
 
 #reply {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #828282;    
-    font-size: 10px;
-    margin-top: 0;
-    margin-left: 22px;
-    text-decoration: underline;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #828282;
+  font-size: 10px;
+  margin-top: 0;
+  margin-left: 22px;
+  text-decoration: underline;
 }
 
 #replyButton {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 11px;
-    margin-top: 2px;
-    padding: 2px 7px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 11px;
+  margin-top: 2px;
+  padding: 2px 7px;
 }
 
-
 #titleText {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #828282;    
-    font-size: 12px;
-    text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #828282;
+  font-size: 12px;
+  text-decoration: none;
 }
 
 #likeandtitle {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 #subtitulo {
-    display: flex;
-    margin-top: 0;
-    font-size: 10.67px;
-    font-weight: 400;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #828282;
-    align-items: center;
-    text-decoration: none;
+  display: flex;
+  margin-top: 0;
+  font-size: 10.67px;
+  font-weight: 400;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #828282;
+  align-items: center;
+  text-decoration: none;
 }
 
 #form {
-    display: flex;
-    flex-direction: column;
-    margin-left: 22px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 22px;
 }
 
 .topbarItem {
-    padding: 5px;
-    color: black;
-    text-decoration: none;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 13px;
+  padding: 5px;
+  color: black;
+  text-decoration: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+}
+
+.Login {
+  margin-left: auto;
+  margin-right: 5px;
+  text-decoration: none;
+  color: black;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
 }
 
 .topbarTitle {
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 13px;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
 }
 
 #current {
-    color: white;
+  color: white;
 }
 
-#mainDiv, #submitDiv {
-    margin-left: 9.67%;
-    width: 80.67%;
-    background-color: #f6f6ef;
+#mainDiv,
+#submitDiv {
+  margin-left: 9.67%;
+  width: 80.67%;
+  background-color: #f6f6ef;
 }
 
 #threadsDiv {
-    margin-left: 22px;
+  margin-left: 22px;
 }
