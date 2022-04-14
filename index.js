@@ -7,28 +7,41 @@ const app = express();
 const postController = require('./controllers/postController');
 const userController = require('./controllers/userController');
 
+var session = require('express-session')
+
 const googleApi = require('./src/google-util');
 
 
 const PORT = process.env.PORT || 5000;
 
+var currentUserLogged;
+
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(errorHandler);
-app.use(express.static(path.join(__dirname, '/public')))
+app.use(express.static(path.join(__dirname, '/public')));
+var MemoryStore =session.MemoryStore;
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    store: new MemoryStore(),
+    saveUninitialized: true
+  }));
 
 function renderPage(res, view, layoutInfo) {
     res.render(view, layoutInfo);
 };
 
 app.get('/auth/google/callback', async function(req, res) {
-    googleApi.GetGoogleUserInfo(res);
+    req.session.currentUserLogged = await googleApi.GetGoogleUserInfo(req.query.code);
+    console.log(req.session.currentUserLogged);
+    res.redirect('/');
 });
 
 app.get('/', async function(req, res) {
     const result = await postController.getAll("likes");
     //await postController.getAllCommentsByUsername('tortuga');
-    renderPage(res, 'home', {layout: 'main', posts: result, googleURL: googleApi.GetGoogleURL()});
+    renderPage(res, 'home', {layout: 'main', posts: result, loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 
 });
 
