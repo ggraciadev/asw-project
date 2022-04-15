@@ -6,14 +6,27 @@ const createUserObj = async (row) => {
     console.log(obj);
     return obj;
 }
+async function logInGoogle(email, req) {
+    let q = "select * from Users where username='" + email + "';";
+    let result = await db.query(q);
+    if(result.rows.length === 0) {
+        let randomPswd = new Date().toISOString();
+        //creamos al usuario
+        q = "insert into Users (username, pswd) values('" + email + "', '" + randomPswd + "');"
+        result = await db.query(q);
+    }
+    else {
+        //todo piola
+    }
+    req.session.currentUserLogged = email;
+    console.log(email + " has logged in");
+}
 
 
-
-
-async function likeComment(commentId){
+async function likeComment(commentId, loggedUser){
     try {
         //TODO: Substituir tortuga por usuario logado
-        let qAllUserLikes = "select commentid from likeComment where commentid=" + commentId + " and username='tortuga';";
+        let qAllUserLikes = "select commentid from likeComment where commentid=" + commentId + " and username='" + loggedUser + "';";
         let qAllUserLikesResult = await db.query(qAllUserLikes);
         let hasLiked = false;
         let q, q2;
@@ -25,11 +38,11 @@ async function likeComment(commentId){
         }
         if(hasLiked) {
             q = "update comments set likes=likes-1 where id=" + commentId + ";";
-            q2 = "delete from likeComment where commentid=" + commentId + " and username='tortuga';";
+            q2 = "delete from likeComment where commentid=" + commentId + " and username='" + loggedUser + "';";
         }
         else {
             q = "update comments set likes=likes+1 where id=" + commentId + ";";
-            q2 = "insert into likeComment values('tortuga', " + commentId + ");";
+            q2 = "insert into likeComment values('" + loggedUser + "', " + commentId + ");";
 
         }
         await db.query(q);
@@ -39,10 +52,10 @@ async function likeComment(commentId){
     }
 }
 
-async function likePost(postId){
+async function likePost(postId, loggedUser){
     try {
         //TODO: Substituir tortuga por usuario logado
-        let qAllUserLikes = "select postid from likePost where postid=" + postId + " and username='tortuga';";
+        let qAllUserLikes = "select postid from likePost where postid=" + postId + " and username='" + loggedUser + "';";
         let qAllUserLikesResult = await db.query(qAllUserLikes);
         let hasLiked = false;
         let q, q2;
@@ -54,11 +67,11 @@ async function likePost(postId){
         }
         if(hasLiked) {
             q = "update post set likes=likes-1 where id=" + postId + ";";
-            q2 = "delete from likePost where postid=" + postId + " and username='tortuga';";
+            q2 = "delete from likePost where postid=" + postId + " and username='" + loggedUser + "';";
         }
         else {
             q = "update post set likes=likes+1 where id=" + postId + ";";
-            q2 = "insert into likePost values('tortuga', " + postId + ");";
+            q2 = "insert into likePost values('" + loggedUser + "', " + postId + ");";
 
         }
         await db.query(q);
@@ -123,4 +136,5 @@ module.exports = {
     getByURL,
     likeComment,
     likePost,
+    logInGoogle
 }

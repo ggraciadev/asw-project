@@ -24,12 +24,12 @@ const createCommentTree = (comments) => {
 }
 
 
-const createPostObj = async (row, withComments, commentID) => {
+const createPostObj = async (row, withComments, commentID, loggedUser) => {
     let obj = new Post(row.id, row.title, row.url, row.msg, row.likes, row.username, row.creationtime, row.commentsnum, row.userliked);
 
     if(withComments == "withComments") {
-        const q = await db.query("select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where c.postid = "+ row.id +" and 'tortuga' in (select l.username from likecomment l where l.commentid = c.id) " +
-        "union select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 0 as userLiked from comments c where c.postid = "+ row.id +" and 'tortuga' not in (select l.username from likecomment l where l.commentid = c.id) order by creationtime desc;")
+        const q = await db.query("select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where c.postid = "+ row.id +" and '" + loggedUser + "' in (select l.username from likecomment l where l.commentid = c.id) " +
+        "union select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 0 as userLiked from comments c where c.postid = "+ row.id +" and '" + loggedUser + "' not in (select l.username from likecomment l where l.commentid = c.id) order by creationtime desc;")
         let rows = q.rows;
         let allComments = [];
         for(let i = 0; i < rows.length; ++i) {
@@ -50,19 +50,18 @@ const createPostObj = async (row, withComments, commentID) => {
     return obj;
 }
 
-const getAll = async (orderBy) => {
+const getAll = async (orderBy, loggedUser) => {
     try {
-        const q = await db.query("select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 0 as userLiked from comments c, post p where (c.postid = p.id and 'tortuga' not in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 0 as userLiked from post p where (p.id not in (select postid from comments) and 'tortuga' not in (select l.username from likepost l where l.postid = p.id)) " + 
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 1 as userLiked from comments c, post p where (c.postid = p.id and 'tortuga' in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 1 as userLiked from post p where (p.id not in (select postid from comments) and 'tortuga' in (select l.username from likepost l where l.postid = p.id)) order by " + orderBy + " desc;");
-        
-        
+        const q = await db.query("select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 0 as userLiked from comments c, post p where (c.postid = p.id and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 0 as userLiked from post p where (p.id not in (select postid from comments) and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) " + 
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 1 as userLiked from comments c, post p where (c.postid = p.id and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 1 as userLiked from post p where (p.id not in (select postid from comments) and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) order by " + orderBy + " desc;");
+
         let rows = q.rows;
         let result = [];
         
         for(let i = 0; i < rows.length; ++i) {
-            let temp = await createPostObj(rows[i], "noComments", null);
+            let temp = await createPostObj(rows[i], "noComments", null, loggedUser);
             result.push(temp);
         }
         return result;
@@ -72,18 +71,18 @@ const getAll = async (orderBy) => {
     }
 }
 
-const getAllAsk = async (orderBy) => {
+const getAllAsk = async (orderBy, loggedUser) => {
     try {
-        const q = await db.query("select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 0 as userLiked from comments c, post p where (p.url = '' and c.postid = p.id and 'tortuga' not in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 0 as userLiked from post p where (p.url = '' and p.id not in (select postid from comments) and 'tortuga' not in (select l.username from likepost l where l.postid = p.id)) " + 
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 1 as userLiked from comments c, post p where (p.url = '' and c.postid = p.id and 'tortuga' in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 1 as userLiked from post p where (p.url = '' and p.id not in (select postid from comments) and 'tortuga' in (select l.username from likepost l where l.postid = p.id)) order by " + orderBy + " desc;");
+        const q = await db.query("select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 0 as userLiked from comments c, post p where (p.url = '' and c.postid = p.id and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 0 as userLiked from post p where (p.url = '' and p.id not in (select postid from comments) and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) " + 
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 1 as userLiked from comments c, post p where (p.url = '' and c.postid = p.id and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 1 as userLiked from post p where (p.url = '' and p.id not in (select postid from comments) and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) order by " + orderBy + " desc;");
         
         let rows = q.rows;
         let result = [];
         
         for(let i = 0; i < rows.length; ++i) {
-            let temp = await createPostObj(rows[i], "noComments", null);
+            let temp = await createPostObj(rows[i], "noComments", null, loggedUser);
             result.push(temp);
         }
         return result;
@@ -96,8 +95,8 @@ const getAllAsk = async (orderBy) => {
 const getAllCommentsByUsername = async (username) => {
     try {
         const result = [];
-        const q = await db.query("select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where 'tortuga' in (select l.username from likecomment l where l.commentid = c.id)" +
-        "union select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 0 as userLiked from comments c where 'tortuga' not in (select l.username from likecomment l where l.commentid = c.id) order by creationtime desc;");
+        const q = await db.query("select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where '" + username + "' in (select l.username from likecomment l where l.commentid = c.id)" +
+        "union select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 0 as userLiked from comments c where '" + username + "' not in (select l.username from likecomment l where l.commentid = c.id) order by creationtime desc;");
         //const q = await db.query("select * from comments where author = '"+ username +"';");
         let rows = q.rows;
         let allComments = [];
@@ -117,11 +116,11 @@ const getAllCommentsByUsername = async (username) => {
 }
 
 
-const getById = async (id) => {
+const getById = async (id, loggedUser) => {
     try {
         const q = await db.query("select * from Post where id=" + id + " order by likes desc");
         let rows = q.rows
-        let temp = await createPostObj(rows[0], "withComments", null);
+        let temp = await createPostObj(rows[0], "withComments", null, loggedUser);
         return temp;
 
     } catch (error) {
@@ -129,11 +128,11 @@ const getById = async (id) => {
     }
 }
 
-const getByIdWithOneComment = async (id, commentid) => {
+const getByIdWithOneComment = async (id, commentid, loggedUser) => {
     try {
         const q = await db.query("select * from Post where id=" + id + " order by likes desc");
         let rows = q.rows
-        let temp = await createPostObj(rows[0], "oneComment", commentid);
+        let temp = await createPostObj(rows[0], "oneComment", commentid, loggedUser);
         return temp;
 
     } catch (error) {
@@ -142,19 +141,76 @@ const getByIdWithOneComment = async (id, commentid) => {
 }
 
 //Post if URL already exists, null otherwise
-const getByURL = async (url) => {
+const getByURL = async (url, loggedUser) => {
     try {
+        if(url === null || url === '') {
+            return null;
+        }
+        console.log("select * from Post where url='" + url + "';");
         const q = await db.query("select * from Post where url='" + url + "';");
         if(q.rows.length === 0) {
             return null;
         }
         else {
-            let temp = await createPostObj(q.rows[0], "withComments", null);
+            let temp = await createPostObj(q.rows[0], "withComments", null, loggedUser);
             return temp;
         }
     } catch (error) {
         console.log(error);
     }
+}
+
+const insertPost = async (post) => {
+    let q = "insert into POST(title, msg, url, username, creationTime) values ('" + post.title + 
+    "', '" + post.msg + "', '" + post.url + "', '" + post.username + "', '" + post.creationTime + "') RETURNING *"; 
+    let linkToGo = "";
+    if(post.title === undefined || post.title === ""){
+        //Aqui va una alerta en texto
+        console.log("Case1");
+        linkToGo = '/submit';
+    }
+    else if(post.url === "" && post.msg === undefined){
+        //Aqui va una alerta en texto
+        console.log("Case2");
+        linkToGo = '/submit';
+    }
+    else if(post.url !== "" && post.msg !== ""){
+        //Crear post con url y el mensaje como comment. 
+        let urlPost = await getByURL(post.url, post.username);
+        
+        if(urlPost === null){
+            q = "insert into POST(title, url, username, creationTime) values ('" + post.title + 
+            "', '" + post.url + "', '" + post.username + "', '" + post.creationTime + "') RETURNING *"; 
+            await db.query(q);
+            let tempPost = await getByURL(post.url, post.username);
+            console.log("post: " + tempPost);
+            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + tempPost.rows[0].id + 
+            "', '" + post.username + "', '" + post.creationTime + "', '" + post.msg + "')"; 
+            await db.query(q2);
+            linkToGo = '/item?id=' + tempPost.rows[0].id;
+        }
+        else {
+            linkToGo = '/item?id=' + urlPost.id;
+        }
+        console.log("Case3");
+    }
+    else {
+        let urlPost = await getByURL(post.url, post.username);
+        console.log("urlPost: " + urlPost);
+        if(urlPost === null){
+            let tempPost = await db.query(q);
+            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + tempPost.rows[0].id + 
+            "', '" + post.username + "', '" + post.creationTime + "', '" + post.msg + "')"; 
+            await db.query(q2);
+            linkToGo = '/item?id=' + tempPost.rows[0].id;
+        }
+        else {
+            console.log("Potato: " + urlPost);
+            linkToGo = '/item?id=' + urlPost.id;
+        }
+        console.log("Case4");
+    }
+    return linkToGo;
 }
 
 module.exports = {
@@ -164,4 +220,6 @@ module.exports = {
     getById,
     getByIdWithOneComment,
     getByURL,
+    insertPost,
+
 }

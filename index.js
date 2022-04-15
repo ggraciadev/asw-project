@@ -10,6 +10,7 @@ const userController = require('./controllers/userController');
 var session = require('express-session')
 
 const googleApi = require('./src/google-util');
+const { Post } = require("./models/index.js");
 
 
 const PORT = process.env.PORT || 5000;
@@ -33,106 +34,61 @@ function renderPage(res, view, layoutInfo) {
 };
 
 app.get('/auth/google/callback', async function(req, res) {
-    req.session.currentUserLogged = await googleApi.GetGoogleUserInfo(req.query.code);
-    console.log(req.session.currentUserLogged);
+    let email = await googleApi.GetGoogleUserInfo(req.query.code);
+    await userController.logInGoogle(email, req);
     res.redirect('/');
 });
 
 app.get('/', async function(req, res) {
-    const result = await postController.getAll("likes");
+    const result = await postController.getAll("likes", req.session.currentUserLogged);
     //await postController.getAllCommentsByUsername('tortuga');
     renderPage(res, 'home', {layout: 'main', posts: result, loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 
 });
 
 app.get('/newest', async function(req, res) {
-    const result = await postController.getAll("creationtime");
-    renderPage(res, 'home', {layout: 'main', posts: result});
+    const result = await postController.getAll("creationtime", req.session.currentUserLogged);
+    renderPage(res, 'home', {layout: 'main', posts: result, loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 });
 
 app.get('/ask', async function(req, res) {
-    const result = await postController.getAllAsk("likes");
-    renderPage(res, 'home', {layout: 'main', posts: result});
+    const result = await postController.getAllAsk("likes", req.session.currentUserLogged);
+    renderPage(res, 'home', {layout: 'main', posts: result, loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 });
 
 app.get('/threads', async function(req, res) {
     let username = req.query.username;
     const result = await postController.getAllCommentsByUsername(username);
     console.log(result);
-    renderPage(res, 'home', {layout: 'threads', posts: result});
+    renderPage(res, 'home', {layout: 'threads', posts: result, loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 });
 
 app.get('/submit', async function(req, res) {
-    renderPage(res, 'home', {layout: 'submit'});
+    renderPage(res, 'home', {layout: 'submit', loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 });
 
 app.post('/submit', async function(req, res) {
     let title = req.body.title.trim();
     let url = req.body.url.trim();
     let msg = req.body.msg;
-    let username = 'tortuga';
+    let username = req.session.currentUserLogged;
     let creationTime = new Date().toISOString();
-    let q = "insert into POST(title, msg, url, username, creationTime) values ('" + title + 
-    "', '" + msg + "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
-    if(title === undefined || title === ""){
-        //Aqui va una alerta en texto
-        console.log("Case1");
-        res.redirect('/submit');
-    }
-    else if(url === "" && msg === undefined){
-        //Aqui va una alerta en texto
-        console.log("Case2");
-        res.redirect('/submit');
-    }
-    else if(url !== "" && msg !== ""){
-        //Crear post con url y el mensaje como comment. 
-        let urlPost = await postController.getByURL(url);
-        
-        if(urlPost === null){
-            q = "insert into POST(title, url, username, creationTime) values ('" + title + 
-            "', '" + url + "', '" + username + "', '" + creationTime + "')"; 
-            await db.query(q);
-            let post = await postController.getByURL(url);
-            console.log("post: " + post);
-            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + post.id + 
-            "', '" + username + "', '" + creationTime + "', '" + msg + "')"; 
-            await db.query(q2);
-            res.redirect('/item?id=' + post.id);
-        }
-        else {
-            res.redirect('/item?id=' + urlPost.id);
-        }
-        console.log("Case3");
-    }
-    else {
-        let urlPost = await postController.getByURL(url);
-        console.log("urlPost: " + urlPost);
-        if(urlPost === null){
-            let post = await db.query(q);
-            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + post.id + 
-            "', '" + username + "', '" + creationTime + "', '" + msg + "')"; 
-            await db.query(q2);
-            res.redirect('/item?id=' + post.id);
-        }
-        else {
-            console.log("Potato: " + urlPost);
-            res.redirect('/item?id=' + urlPost.id);
-        }
-        console.log("Case4");
-    }
+    let post = new Post(-1, title, url, msg, 0, username, creationTime, 0, 0);
+    let linkToGo = await postController.insertPost(post);
+    res.redirect(linkToGo);
 });
 
 
 app.get('/item', async function(req, res) {
     let id = req.query.id;
-    const result = await postController.getById(id);
-    renderPage(res, 'home', {layout: 'item', post: result});
+    const result = await postController.getById(id, req.session.currentUserLogged);
+    renderPage(res, 'home', {layout: 'item', post: result, loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 
 });
 
 app.post('/item', async function(req, res) {
     let postId = req.query.id;
-    let author = 'tortuga';
+    let author = req.session.currentUserLogged;
     let creationTime = new Date().toISOString();
     let message = req.body.text;
     
@@ -147,13 +103,13 @@ app.post('/item', async function(req, res) {
 app.get('/reply', async function(req, res) {
     let postid = req.query.postid;
     let commentid = req.query.commentid;
-    const result = await postController.getByIdWithOneComment(postid, commentid);
-    renderPage(res, 'home', {layout: 'reply', post: result});
+    const result = await postController.getByIdWithOneComment(postid, commentid, req.session.currentUserLogged);
+    renderPage(res, 'home', {layout: 'reply', post: result, loggedUser: req.session.currentUserLogged, googleURL: googleApi.GetGoogleURL()});
 });
 
 app.post('/reply', async function(req, res) {
     let postId = req.query.postid;
-    let author = 'tortuga';
+    let author = req.session.currentUserLogged;
     let creationTime = new Date().toISOString();
     let parentId = req.query.commentid;
     let message = req.body.text;
@@ -175,12 +131,12 @@ app.get('/500', function (req,res) {
 });
 
 app.get('/votePost', async function(req, res) {
-    await userController.likePost(req.query.id);
+    await userController.likePost(req.query.id, req.session.currentUserLogged);
     res.redirect('back');
 });
 
 app.get('/voteComment', async function(req, res) {
-    await userController.likeComment(req.query.id);
+    await userController.likeComment(req.query.id, req.session.currentUserLogged);
     res.redirect('back');
 });
  
