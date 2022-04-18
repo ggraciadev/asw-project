@@ -14,8 +14,9 @@
                 <div id="threadsDiv">
                     <br>
                     <span id="subtitulo">
-                        <a style="color: #828282" {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{likes}} points by {{author}} {{prettifyDate creationTime}}</a>
-                        | prev | next [-]
+                        <p style="color: #828282">{{likes}} points by</p>
+                        <a id = "userTag" href="/user?username={{truncate author}}">{{truncate author}}</a> 
+                        {{prettifyDate creationTime}} | prev | next [-]
                     </span>
                     <p id = "comment">{{message}}</p>
                     <a id = "reply" href={{getReply postID id}}>reply</a>

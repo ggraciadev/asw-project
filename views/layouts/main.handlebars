@@ -20,7 +20,9 @@
                         <h1 id="titulo">{{math @index "+" 1}}. {{titleURL title url}}</h1>
                     </a>
                 </span>
-                <span id="subtitulo">{{likes}} points by {{username}} {{prettifyDate creationTime}} | flag | hide | 
+                <span id="subtitulo">{{likes}} points by
+                <a id="userTag" href = "/user?username={{truncate username}}"> {{truncate username}} </a> 
+                {{prettifyDate creationTime}} | flag | hide | 
                 <a id="subtitulo" href="item?id={{id}}"> {{commentsNum}} comments</a> </span>   
                 <br>
             {{/each}}

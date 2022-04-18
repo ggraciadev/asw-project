@@ -127,6 +127,13 @@ a {
   text-decoration: none;
 }
 
+#messageText {
+  font-family: Verdana, Geneva, sans-serif;
+  color: #828282;
+  font-size: 10pt;
+  font-style: italic;
+}
+
 #likeandtitle {
   display: flex;
   align-items: center;
@@ -142,6 +149,19 @@ a {
   color: #828282;
   align-items: center;
   text-decoration: none;
+}
+
+#userTag {
+  display: flex;
+  margin-top: 0;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 10.67px;
+  font-weight: 400;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #828282;
+  align-items: center;
+  text-decoration: underline;
 }
 
 #form {

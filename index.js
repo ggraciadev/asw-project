@@ -11,6 +11,7 @@ var session = require("express-session");
 
 const googleApi = require("./src/google-util");
 const { Post } = require("./models/index.js");
+console.log("Server started");
 
 const PORT = process.env.PORT || 5000;
 
@@ -86,6 +87,18 @@ app.get("/threads", async function (req, res) {
   console.log(result);
   renderPage(res, "home", {
     layout: "threads",
+    posts: result,
+    loggedUser: req.session.currentUserLogged,
+    googleURL: googleApi.GetGoogleURL(),
+  });
+});
+
+app.get("/submitted", async function (req, res) {
+  let username = req.query.username;
+  const result = await postController.getAllPostsByUsername(username);
+  console.log(result);
+  renderPage(res, "home", {
+    layout: "main",
     posts: result,
     loggedUser: req.session.currentUserLogged,
     googleURL: googleApi.GetGoogleURL(),

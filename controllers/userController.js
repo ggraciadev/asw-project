@@ -3,24 +3,24 @@ const {Post, Comment, User} = require("../models");
 
 const createUserObj = async (row) => {
     console.log(row);
-    let obj = new User(row.username, row.pswd, row.creationtime, row.aboutme, row.phone, row.linusername, row.ghusername, row.likedComments, row.likedPosts);
-    console.log(obj);
+    let obj = new User(row.username, row.email, row.pswd, row.creationtime, row.aboutme, row.phone, row.linusername, row.ghusername, row.likedComments, row.likedPosts);
     return obj;
 }
 async function logInGoogle(email, req) {
-    let q = "select * from Users where username='" + email + "';";
+    let username = email.split("@")[0];
+    let q = "select * from Users where username='" + username + "';";
     let result = await db.query(q);
     if(result.rows.length === 0) {
         let randomPswd = new Date().toISOString();
+        let creationTime = new Date().toISOString();
         //creamos al usuario
-        q = "insert into Users (username, pswd) values('" + email + "', '" + randomPswd + "');"
+        q = "insert into Users (email, username, pswd, creationTime) values('" + email + "', '" + username + "', '" + randomPswd + "', '" + creationTime + "');"
         result = await db.query(q);
     }
     else {
         //todo piola
     }
-    req.session.currentUserLogged = email;
-    console.log(email + " has logged in");
+    req.session.currentUserLogged = username;
 }
 
 

@@ -10,7 +10,9 @@
                 <a href="{{post.url}}">
                 <h1 id="tituloItem">{{titleURL post.title post.url}}</h1>
                 </a>
-                <span id="subtitulo">{{post.likes}} points by {{post.username}} {{prettifyDate post.creationTime}} | flag | hide | 
+                <span id="subtitulo">{{post.likes}} points by 
+                <a id = "userTag" href = "/user?username={{truncate post.username}}">{{truncate post.username}}</a> 
+                {{prettifyDate post.creationTime}} | flag | hide | 
                 <a id="subtitulo">{{post.commentsNum}} comments</a>
                 </span>
                 <p id="text">{{post.msg}}</p>

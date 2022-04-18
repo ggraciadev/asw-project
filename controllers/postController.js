@@ -95,9 +95,8 @@ const getAllAsk = async (orderBy, loggedUser) => {
 const getAllCommentsByUsername = async (username) => {
     try {
         const result = [];
-        const q = await db.query("select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where '" + username + "' in (select l.username from likecomment l where l.commentid = c.id)" +
-        "union select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 0 as userLiked from comments c where '" + username + "' not in (select l.username from likecomment l where l.commentid = c.id) order by creationtime desc;");
-        //const q = await db.query("select * from comments where author = '"+ username +"';");
+        const q = await db.query("select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where c.author = '" + username + "' and '" + username + "' in (select l.username from likecomment l where l.commentid = c.id)" +
+        "union select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 0 as userLiked from comments c where c.author = '" + username + "' and '" + username + "' not in (select l.username from likecomment l where l.commentid = c.id) order by creationtime desc;");
         let rows = q.rows;
         let allComments = [];
         for(let i = 0; i < rows.length; ++i) {
@@ -115,6 +114,26 @@ const getAllCommentsByUsername = async (username) => {
     }
 }
 
+const getAllPostsByUsername = async (loggedUser) => {
+    try {
+        const q = await db.query("select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 0 as userLiked from comments c, post p where p.username = '" + loggedUser + "' and (c.postid = p.id and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 0 as userLiked from post p where p.username = '" + loggedUser + "' and (p.id not in (select postid from comments) and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) " + 
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 1 as userLiked from comments c, post p where p.username = '" + loggedUser + "' and (c.postid = p.id and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 1 as userLiked from post p where p.username = '" + loggedUser + "' and (p.id not in (select postid from comments) and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) order by creationtime desc;");
+
+        let rows = q.rows;
+        let result = [];
+        
+        for(let i = 0; i < rows.length; ++i) {
+            let temp = await createPostObj(rows[i], "noComments", null, loggedUser);
+            result.push(temp);
+        }
+        return result;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 
 const getById = async (id, loggedUser) => {
     try {
@@ -217,6 +236,7 @@ module.exports = {
     getAll,
     getAllAsk,
     getAllCommentsByUsername,
+    getAllPostsByUsername,
     getById,
     getByIdWithOneComment,
     getByURL,

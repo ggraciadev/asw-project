@@ -23,8 +23,8 @@
                     |                                   {{!-- Canviar TORTUGA per user actiu --}}
                      
                     {{#if loggedUser}}                  
-                        <a class="topbarItem" href="/threads?username="{{truncate loggedUser}}>threads</a>            
-                        <a class="Login" href="/profile">{{truncate loggedUser}}</a> 
+                        <a class="topbarItem" href="/threads?username={{loggedUser}}">threads</a>            
+                        <a class="Login" href="/profile">{{loggedUser}}</a> 
                     {{else}}     
                         <a class="topbarItem" href="/threads?username=tortuga">threads</a>  
                         <a class="Login" href={{googleURL}}>Login</a>    
@@ -35,7 +35,6 @@
     
     <script>
 
-        //FIX ME: Threads no se pone en blanco por tener atributo "?username=tortuga"
         var elements = document.getElementsByClassName("topbarItem");
         let ref = window.location.href.split('/');
         for(let i = 0; i < elements.length; ++i){

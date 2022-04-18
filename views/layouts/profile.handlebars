@@ -34,9 +34,18 @@
               <td> </td>
             </tr>
             <tr>
+              <td>
+
+              </td>
+              <td id="messageText">
+                Only admins see your email below. To share publicly, add to the
+                'about' box.
+              </td>
+            </tr> 
+            <tr>
               <td id="titleText">email:</td>
               <td id="titleText">
-                {{user.username}}
+                {{user.email}}
               </td>
             </tr>
             <tr>
@@ -56,15 +65,6 @@
                 >{{user.aboutMe}}</textarea>
               </td>
             </tr>
-            <tr>
-              <td>
-
-              </td>
-              <td id="titleText">
-                Only admins see your email below. To share publicly, add to the
-                'about' box.
-              </td>
-            </tr> 
             <tr>
               <td id="titleText">phone:</td>
               <td>
@@ -87,7 +87,7 @@
               <td>
                 <a
                   id="link"
-                  href="https://news.ycombinator.com/submitted?id=justshowpost"
+                  href="/submitted?username={{user.username}}"
                 ><u>submissions</u></a>
               </td>
             </tr>
@@ -96,14 +96,14 @@
               <td>
                 <a
                   id="link"
-                  href="https://news.ycombinator.com/threads?id=justshowpost"
+                  href="/threads?username={{user.username}}"
                 ><u>comments</u></a>
               </td>
             </tr>
             <tr>
               <td></td>
               <td>
-                <a id="link" href="https://news.ycombinator.com/hidden"><u
+                <a id="link" href="/"><u
                   >hidden</u></a>
               </td>
             </tr>
@@ -112,12 +112,12 @@
               <td>
                 <a
                   id="link"
-                  href="https://news.ycombinator.com/upvoted?id=justshowpost"
+                  href="/"
                 ><u>upvoted submissions</u></a>
                 /
                 <a
                   id="link"
-                  href="https://news.ycombinator.com/upvoted?id=justshowpost&amp;comments=t"
+                  href="/"
                 ><u>comments</u></a>
                 <span id="titleText" style="font-style: italic">(private)</span>
               </td>
@@ -127,12 +127,12 @@
               <td>
                 <a
                   id="link"
-                  href="https://news.ycombinator.com/favorites?id=justshowpost"
+                  href="/"
                 ><u>favorite submissions</u></a>
                 /
                 <a
                   id="link"
-                  href="https://news.ycombinator.com/favorites?id=justshowpost&amp;comments=t"
+                  href="/"
                 ><u>comments</u></a>
                 <span id="titleText" style="font-style: italic">(public)</span>
               </td>

@@ -8,7 +8,9 @@
                 <img id="likeButton" src="resources/empty_heart.png">
             {{/if}}
         </a>
-        <a style="color: #828282" {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{likes}} points by {{author}} {{prettifyDate creationTime}}</a>
+        <p style="color: #828282">{{likes}} points by </p>
+        <a id = "userTag" href="/user?username={{truncate author}}">{{truncate author}}</a>
+        {{prettifyDate creationTime}}
         | prev | next [-]
     </span>
     <p id = "comment">{{message}}</p>

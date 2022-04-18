@@ -16,7 +16,9 @@
                         {{/if}}
                     </a>
                     <span id="subtitulo">
-                        <a {{!-- href="/users/id?=author" Aqui ira el link al perfil del user --}} >{{likes}} points by {{author}} {{prettifyDate creationTime}}</a>
+                        {{likes}} points by 
+                        <a id = "userTag" href = "/user?username={{truncate author}}">{{truncate author}}</a>
+                        {{prettifyDate creationTime}}
                         <a style="color: #828282" href="{{url}}">| parent </a>
                         <a style="color: #828282" href="{{url}}">| context </a>
                         | flag | on : 
