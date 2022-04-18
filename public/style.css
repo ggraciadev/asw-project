@@ -121,9 +121,9 @@ a {
 }
 
 #titleText {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;
   color: #828282;
-  font-size: 12px;
+  font-size: 10pt;
   text-decoration: none;
 }
 
@@ -180,12 +180,25 @@ a {
 }
 
 #mainDiv,
-#submitDiv {
+#submitDiv,
+#userDiv,
+#profileDiv {
   margin-left: 9.67%;
   width: 80.67%;
   background-color: #f6f6ef;
 }
 
+#userDiv,
+#profileDiv {
+  padding-top: 18px;
+}
+
 #threadsDiv {
   margin-left: 22px;
+}
+
+#link {
+  color: #000000;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 10pt;
 }

@@ -2,7 +2,8 @@ const db = require("../db.js");
 const {Post, Comment, User} = require("../models");
 
 const createUserObj = async (row) => {
-    let obj = new User(row.username, row.password, row.likedComments, row.likedPosts);
+    console.log(row);
+    let obj = new User(row.username, row.pswd, row.creationtime, row.aboutme, row.phone, row.linusername, row.ghusername, row.likedComments, row.likedPosts);
     console.log(obj);
     return obj;
 }
@@ -101,12 +102,12 @@ const getAll = async (orderBy) => {
     }
 }
 
-const getById = async (id) => {
+const getByUsername = async (username) => {
     try {
-        const q = await db.query("select * from Post where id=" + id + " order by likes desc");
+        const q = await db.query("select * from Users where username='" + username + "';");
         let rows = q.rows
-        let temp = await createPostObj(rows[0], true);
-        console.log(temp);
+        let temp = await createUserObj(rows[0], true);
+
         return temp;
 
     } catch (error) {
@@ -114,26 +115,9 @@ const getById = async (id) => {
     }
 }
 
-//Post if URL already exists, null otherwise
-const getByURL = async (url) => {
-    try {
-        const q = await db.query("select * from Post where url='" + url + "';");
-        if(q.rows.length === 0) {
-            return null;
-        }
-        else {
-            let temp = await createPostObj(q.rows[0], true);
-            return temp;
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 module.exports = {
     getAll,
-    getById,
-    getByURL,
+    getByUsername,
     likeComment,
     likePost,
     logInGoogle
