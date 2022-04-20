@@ -2,7 +2,6 @@ const db = require("../db.js");
 const {Post, Comment, User} = require("../models");
 
 const createUserObj = async (row) => {
-    console.log(row);
     let obj = new User(row.username, row.email, row.pswd, row.creationtime, row.aboutme, row.phone, row.linusername, row.ghusername, row.likedComments, row.likedPosts);
     return obj;
 }
@@ -115,10 +114,22 @@ const getByUsername = async (username) => {
     }
 }
 
+const updateUser = async (username, aboutMe, phone, linkedin, github) => {
+    try {
+        let q = "update Users set aboutme='" + aboutMe + "', phone='" + phone + "', linusername='" + linkedin + "', ghusername='" + github + "' where username='" + username + "';";
+        await db.query(q);
+        console.log(q);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getAll,
     getByUsername,
     likeComment,
     likePost,
-    logInGoogle
+    logInGoogle,
+    updateUser
 }

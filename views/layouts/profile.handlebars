@@ -16,10 +16,7 @@
                   <tbody>
                     <tr>
                       <td id="titleText">
-                        Please put a valid address in the email field, or we
-                        won't be able to send you a new password if you forget
-                        yours. Your address is only visible to you and us.
-                        Crawlers and other users can't see it.
+                        Only admins see your email below. To share publicly, add to the 'about' box.
                       </td>
                     </tr>
                   </tbody>
@@ -30,18 +27,6 @@
         </table>
         <table border="0">
           <tbody>
-            <tr style="height: 10px;">
-              <td> </td>
-            </tr>
-            <tr>
-              <td>
-
-              </td>
-              <td id="messageText">
-                Only admins see your email below. To share publicly, add to the
-                'about' box.
-              </td>
-            </tr> 
             <tr>
               <td id="titleText">email:</td>
               <td id="titleText">
@@ -61,26 +46,26 @@
                   cols="60"
                   rows="5"
                   wrap="virtual"
-                  name="about"
+                  name="aboutMe"
                 >{{user.aboutMe}}</textarea>
               </td>
             </tr>
             <tr>
               <td id="titleText">phone:</td>
               <td>
-                <input type="text" value="{{user.phone}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                <input type="text" name="phone" value="{{user.phone}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
               </td>
             </tr>
             <tr>
               <td id="titleText">linkedIn:</td>
               <td>
-                <input type="text" value="{{user.linUsername}}" />
+                <input type="text" name="linkedin" value="{{user.linUsername}}" />
               </td>
             </tr>
             <tr>
               <td id="titleText">github:</td>
               <td>
-                <input type="text" value="{{user.ghUsername}}" />
+                <input type="text" name="github" value="{{user.ghUsername}}" />
               </td>
             <tr>
               <td></td>
@@ -103,13 +88,6 @@
             <tr>
               <td></td>
               <td>
-                <a id="link" href="/"><u
-                  >hidden</u></a>
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>
                 <a
                   id="link"
                   href="/"
@@ -125,22 +103,14 @@
             <tr>
               <td></td>
               <td>
-                <a
-                  id="link"
-                  href="/"
-                ><u>favorite submissions</u></a>
-                /
-                <a
-                  id="link"
-                  href="/"
-                ><u>comments</u></a>
-                <span id="titleText" style="font-style: italic">(public)</span>
+                <br>
+                <input id="topbarItem" type="submit" value="update" />
               </td>
             </tr>
           </tbody>
         </table>
-        <br /><input id="topbarItem" type="submit" value="update" />
       </form>
+      <br>
     </div>
   </body>
 

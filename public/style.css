@@ -121,14 +121,14 @@ a {
 }
 
 #titleText {
-  font-family: Verdana, Geneva, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: #828282;
   font-size: 10pt;
   text-decoration: none;
 }
 
 #messageText {
-  font-family: Verdana, Geneva, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: #828282;
   font-size: 10pt;
   font-style: italic;

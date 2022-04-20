@@ -84,7 +84,6 @@ app.get("/ask", async function (req, res) {
 app.get("/threads", async function (req, res) {
   let username = req.query.username;
   const result = await postController.getAllCommentsByUsername(username);
-  console.log(result);
   renderPage(res, "home", {
     layout: "threads",
     posts: result,
@@ -96,7 +95,6 @@ app.get("/threads", async function (req, res) {
 app.get("/submitted", async function (req, res) {
   let username = req.query.username;
   const result = await postController.getAllPostsByUsername(username);
-  console.log(result);
   renderPage(res, "home", {
     layout: "main",
     posts: result,
@@ -114,14 +112,15 @@ app.get("/submit", async function (req, res) {
 });
 
 app.get("/user", async function (req, res) {
-  let id = req.query.id;
-  const result = await postController.getById(
-    id,
-    req.session.currentUserLogged
-  );
-  renderPage(res, "user", {
+  let id = req.query.username;
+  console.log("id: " + id);
+  const user = await userController.getByUsername(id);
+  console.log("user:");
+  console.log(user);
+  
+  renderPage(res, "home", {
     layout: "user",
-    post: result,
+    user: user,
     loggedUser: req.session.currentUserLogged,
     googleURL: googleApi.GetGoogleURL(),
   });
@@ -129,7 +128,6 @@ app.get("/user", async function (req, res) {
 
 app.get("/profile", async function (req, res) {
   const user = await userController.getByUsername(req.session.currentUserLogged);
-  console.log(user);
   renderPage(res, "home", {
     layout: "profile",
     user: user,
@@ -147,6 +145,16 @@ app.post("/submit", async function (req, res) {
   let post = new Post(-1, title, url, msg, 0, username, creationTime, 0, 0);
   let linkToGo = await postController.insertPost(post);
   res.redirect(linkToGo);
+});
+
+app.post("/profile", async function (req, res) {
+  let aboutMe = req.body.aboutMe.trim();
+  let phone = req.body.phone.trim();
+  let linkedin = req.body.linkedin.trim();
+  let github = req.body.github.trim();
+  let user = req.session.currentUserLogged;
+  await userController.updateUser(user, aboutMe, phone, linkedin, github);  
+  res.redirect("/profile?username=" + user);
 });
 
 app.get("/item", async function (req, res) {

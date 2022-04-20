@@ -165,7 +165,6 @@ const getByURL = async (url, loggedUser) => {
         if(url === null || url === '') {
             return null;
         }
-        console.log("select * from Post where url='" + url + "';");
         const q = await db.query("select * from Post where url='" + url + "';");
         if(q.rows.length === 0) {
             return null;
