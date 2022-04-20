@@ -181,7 +181,7 @@ app.get("/item", async function (req, res) {
 
 app.post("/item", async function (req, res) {
   if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
-    req.session.lastPath = "/item?id=" + req.query.postid;
+    req.session.lastPath = "/item?id=" + req.query.id;
     res.redirect(googleApi.GetGoogleURL());    
   }else{
     let postId = req.query.id;
