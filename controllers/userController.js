@@ -22,6 +22,10 @@ async function logInGoogle(email, req) {
     req.session.currentUserLogged = username;
 }
 
+function logOut(req){
+    req.session.currentUserLogged = "";
+}
+
 
 async function likeComment(commentId, loggedUser){
     try {
@@ -131,5 +135,6 @@ module.exports = {
     likeComment,
     likePost,
     logInGoogle,
-    updateUser
+    updateUser,
+    logOut
 }

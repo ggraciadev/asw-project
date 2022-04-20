@@ -68,6 +68,11 @@ app.get("/newest", async function (req, res) {
   });
 });
 
+app.get("/logout", function(req, res){
+  userController.logOut(req);
+  res.redirect("/");
+});
+
 app.get("/ask", async function (req, res) {
   const result = await postController.getAllAsk(
     "likes",
