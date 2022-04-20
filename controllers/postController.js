@@ -179,56 +179,81 @@ const getByURL = async (url, loggedUser) => {
 }
 
 const insertPost = async (post) => {
-    let q = "insert into POST(title, msg, url, username, creationTime) values ('" + post.title + 
-    "', '" + post.msg + "', '" + post.url + "', '" + post.username + "', '" + post.creationTime + "') RETURNING *"; 
-    let linkToGo = "";
+    let linkToGo = "/";
     if(post.title === undefined || post.title === ""){
-        //Aqui va una alerta en texto
-        console.log("Case1");
+        //Caso 0, no tiene titulo
         linkToGo = '/submit';
     }
-    else if(post.url === "" && post.msg === undefined){
-        //Aqui va una alerta en texto
-        console.log("Case2");
+    else if((post.url === "" || post.url === undefined) && (post.msg === undefined || post.msg === "")){
+        //No hay url ni mensaje, no crear post
         linkToGo = '/submit';
     }
-    else if(post.url !== "" && post.msg !== ""){
-        //Crear post con url y el mensaje como comment. 
-        let urlPost = await getByURL(post.url, post.username);
-        
-        if(urlPost === null){
-            q = "insert into POST(title, url, username, creationTime) values ('" + post.title + 
-            "', '" + post.url + "', '" + post.username + "', '" + post.creationTime + "') RETURNING *"; 
-            await db.query(q);
-            let tempPost = await getByURL(post.url, post.username);
-            console.log("post: " + tempPost);
-            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + tempPost.rows[0].id + 
-            "', '" + post.username + "', '" + post.creationTime + "', '" + post.msg + "')"; 
-            await db.query(q2);
-            linkToGo = '/item?id=' + tempPost.rows[0].id;
-        }
-        else {
-            linkToGo = '/item?id=' + urlPost.id;
-        }
-        console.log("Case3");
+    else if((post.url === "" || post.url === undefined) && (post.msg !== "" || post.msg !== undefined)){
+        //Crear un post con el mensaje y sin url
+        let q = "insert into POST(title, msg, username, creationTime) values ('" + post.title +  "', '" + post.msg + "', '" + post.username + "', '" + post.creationTime + "') RETURNING *";
+        linkToGo = '/item?id=' + (await db.query(q)).rows[0].id;
     }
-    else {
-        let urlPost = await getByURL(post.url, post.username);
-        console.log("urlPost: " + urlPost);
-        if(urlPost === null){
-            let tempPost = await db.query(q);
-            let q2 = "insert into COMMENTS(postid, author, creationtime, message) values ('" + tempPost.rows[0].id + 
-            "', '" + post.username + "', '" + post.creationTime + "', '" + post.msg + "')"; 
-            await db.query(q2);
-            linkToGo = '/item?id=' + tempPost.rows[0].id;
+    else if ((post.url !== "" || post.url !== undefined) && (post.msg === undefined || post.msg === "")){
+        //Crear un post con el url y sin mensaje
+        //If a post exists with that url, redirect to that post
+        let postExists = await getByURL(post.url, post.username);
+        if(postExists === null) {
+            let q = "insert into POST(title, url, username, creationTime) values ('" + post.title +  "', '" + post.url + "', '" + post.username + "', '" + post.creationTime + "') RETURNING *";
+            linkToGo = '/item?id=' + (await db.query(q)).rows[0].id;
         }
         else {
-            console.log("Potato: " + urlPost);
-            linkToGo = '/item?id=' + urlPost.id;
+            linkToGo = "/item?id=" + postExists.id;
         }
-        console.log("Case4");
+    }
+    else if ((post.url !== "" ||post.url !== undefined) && (post.msg !== "" || post.msg !== undefined)){
+        //Crear un post con el url y mensaje como comentario
+        let q = "insert into POST(title, url, username, creationTime) values ('" + post.title +  "', '" + post.url + "', '" + post.username + "', '" + post.creationTime + "') RETURNING *";
+        let postID = (await db.query(q)).rows[0].id;
+        linkToGo = '/item?id=' + postID;
+        let q2 = "insert into comments(postid, author, creationTime, parentid, message, likes) values ('" + postID + "', '" + post.username + "', '" + post.creationTime + "', null, '" + post.msg + "', 0) RETURNING *";
+        await db.query(q2);
     }
     return linkToGo;
+}
+
+const getLikedComments = async (loggedUser) => {
+    try {
+        let query = "select c.id, c.postid, c.author, c.creationtime, c.parentId, c.message, c.likes, 1 as userLiked from comments c where '"+ loggedUser +"' in (select l.username from likecomment l where l.commentid = c.id);";
+        let q = await db.query(query);
+        let rows = q.rows;
+        let result = [];
+        let allComments = [];
+        for(let i = 0; i < rows.length; ++i) {
+            let temp = new Comment(rows[i].id, rows[i].postid, rows[i].author, rows[i].creationtime, rows[i].parentid, rows[i].message, rows[i].likes, rows[i].userliked);
+            allComments.push(temp);
+        }
+        let treeComments = createCommentTree(allComments);
+        for(let i = 0; i < treeComments.length; ++i) {
+            result.push(treeComments[i]);
+        }
+        return result;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+const getLikedPosts = async (loggedUser) => {
+    try {
+        let query = "select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 1 as userLiked from post p where '"+ loggedUser +"' in (select l.username from likepost l where l.postid = p.id);";
+        let q = await db.query(query);
+        let rows = q.rows;
+        let result = [];
+        
+        for(let i = 0; i < rows.length; ++i) {
+            let temp = await createPostObj(rows[i], "noComments", null, loggedUser);
+            result.push(temp);
+        }
+        return result;
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports = {
@@ -240,5 +265,6 @@ module.exports = {
     getByIdWithOneComment,
     getByURL,
     insertPost,
-
+    getLikedComments,
+    getLikedPosts,
 }

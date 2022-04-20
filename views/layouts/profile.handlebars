@@ -90,12 +90,12 @@
               <td>
                 <a
                   id="link"
-                  href="/"
+                  href="/likedPosts?username={{user.username}}"
                 ><u>upvoted submissions</u></a>
                 /
                 <a
                   id="link"
-                  href="/"
+                  href="/likedComments?username={{user.username}}"
                 ><u>comments</u></a>
                 <span id="titleText" style="font-style: italic">(private)</span>
               </td>
@@ -105,9 +105,6 @@
               <td>
                 <br>
                 <input id="topbarItem" type="submit" value="update" />
-              </td>
-               <td>
-                <a id="topbarItem" href="/logout" >log out</a>
               </td>
             </tr>
           </tbody>

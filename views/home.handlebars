@@ -24,7 +24,8 @@
                      
                     {{#if loggedUser}}                  
                         <a class="topbarItem" href="/threads?username={{loggedUser}}">threads</a>            
-                        <a class="Login" href="/profile">{{loggedUser}}</a> 
+                        <a class="Login" href="/profile">({{loggedUser}})</a> 
+                        <a class="topbarItem" style="text-decoration:underline" href="/logout">log out</a>
                     {{else}}     
                         <a class="topbarItem" href="/threads?username=tortuga">threads</a>  
                         <a class="Login" href="/login">Login</a>    
@@ -38,7 +39,7 @@
         var elements = document.getElementsByClassName("topbarItem");
         let ref = window.location.href.split('/');
         for(let i = 0; i < elements.length; ++i){
-            if(ref[ref.length-1] == '' && elements[i].innerHTML == "Home" || ref[ref.length-1] == elements[i].innerHTML.toLowerCase()){
+            if(ref[ref.length-1] == '' && elements[i].innerHTML == "Home" || ref[ref.length-1].includes(elements[i].innerHTML.toLowerCase())){
                 elements[i].setAttribute('id', 'current');
             }
         }

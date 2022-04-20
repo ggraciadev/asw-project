@@ -114,7 +114,7 @@ app.get("/submitted", async function (req, res) {
 });
 
 app.get("/submit", async function (req, res) {
-  if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
+  if (req.session.currentUserLogged === undefined || req.session.currentUserLogged === "") {
     req.session.lastPath = "/submit";
     res.redirect(googleApi.GetGoogleURL());    
   }else{
@@ -141,6 +141,26 @@ app.get("/profile", async function (req, res) {
   renderPage(res, "home", {
     layout: "profile",
     user: user,
+    loggedUser: req.session.currentUserLogged,
+  });
+});
+
+app.get("/likedPosts", async function (req, res) {
+  const username = req.query.username;
+  const result = await postController.getLikedPosts(username);
+  renderPage(res, "home", {
+    layout: "main",
+    posts: result,
+    loggedUser: req.session.currentUserLogged,
+  });
+});
+
+app.get("/likedComments", async function (req, res) {
+  const username = req.query.username;
+  const result = await postController.getLikedComments(username);
+  renderPage(res, "home", {
+    layout: "threads",
+    posts: result,
     loggedUser: req.session.currentUserLogged,
   });
 });
@@ -230,22 +250,26 @@ app.post("/reply", async function (req, res) {
     let creationTime = new Date().toISOString();
     let parentId = req.query.commentid;
     let message = req.body.text;
+    if(message === "" || message === undefined || message === null){
+      res.redirect("/reply?postid="+postId+"&commentid="+parentId);
+    } 
+    else {
+      let q =
+        "insert into COMMENTS(postid, author, creationtime, parentid, message) values ('" +
+        postId +
+        "', '" +
+        author +
+        "', '" +
+        creationTime +
+        "', '" +
+        parentId +
+        "', '" +
+        message +
+        "')";
 
-    let q =
-      "insert into COMMENTS(postid, author, creationtime, parentid, message) values ('" +
-      postId +
-      "', '" +
-      author +
-      "', '" +
-      creationTime +
-      "', '" +
-      parentId +
-      "', '" +
-      message +
-      "')";
-
-    await db.query(q);
-    res.redirect("/item?id=" + postId);
+      await db.query(q);
+      res.redirect("/item?id=" + postId);
+    }
   }
 });
 
@@ -259,7 +283,6 @@ app.get("/500", function (req, res) {
 
 app.get("/votePost", async function (req, res) {
   if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
-    console.log(req.path);
     req.session.lastPath = "/";
     res.redirect(googleApi.GetGoogleURL());    
   }else{
@@ -328,13 +351,13 @@ app.engine(
         }[operator];
       },
       titleURL: function (title, url) {
-        if (url === "") {
+        if (url === "" || url === undefined || url === null) { 
           return title;
         }
         return title + " (" + url + ")";
       },
       titleOrURL: function (id, url) {
-        if (url === "") {
+        if (url === "" || url === undefined || url === null) {
           return "/item?id=" + id;
         }
         return url;
@@ -344,7 +367,10 @@ app.engine(
       },
       truncate: function (mail){
         return mail.split("@")[0];
-      }
+      },
+      getPath: function (postid) {
+        return "/item?id=" + postid;
+      },
     },
   })
 );

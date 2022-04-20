@@ -122,12 +122,15 @@ const updateUser = async (username, aboutMe, phone, linkedin, github) => {
     try {
         let q = "update Users set aboutme='" + aboutMe + "', phone='" + phone + "', linusername='" + linkedin + "', ghusername='" + github + "' where username='" + username + "';";
         await db.query(q);
-        console.log(q);
     }
     catch (error) {
         console.log(error);
     }
 }
+
+
+
+
 
 module.exports = {
     getAll,
@@ -136,5 +139,5 @@ module.exports = {
     likePost,
     logInGoogle,
     updateUser,
-    logOut
+    logOut,
 }

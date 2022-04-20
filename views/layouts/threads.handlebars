@@ -14,12 +14,20 @@
                 <div id="threadsDiv">
                     <br>
                     <span id="subtitulo">
+                        <a href="/voteComment?id={{id}}&postid={{postID}}">
+                            {{#if userLiked}}
+                                <img id="likeButton" src="resources/filled_heart.png">
+                            {{else}}
+                                <img id="likeButton" src="resources/empty_heart.png">
+                            {{/if}}
+                        </a>
                         <p style="color: #828282">{{likes}} points by</p>
                         <a id = "userTag" href="/user?username={{truncate author}}">{{truncate author}}</a> 
                         {{prettifyDate creationTime}} | prev | next [-]
                     </span>
                     <p id = "comment">{{message}}</p>
                     <a id = "reply" href={{getReply postID id}}>reply</a>
+                    <br>
                     <div id="subcomentarios">
                         {{#each comments}}
                             {{> partialComment}}
