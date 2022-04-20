@@ -38,7 +38,7 @@ function renderPage(res, view, layoutInfo) {
 app.get("/auth/google/callback", async function (req, res) {
   let email = await googleApi.GetGoogleUserInfo(req.query.code);
   await userController.logInGoogle(email, req);
-  res.redirect("/");
+  res.redirect(req.session.lastPath);
 });
 
 app.get("/", async function (req, res) {
@@ -51,7 +51,6 @@ app.get("/", async function (req, res) {
     layout: "main",
     posts: result,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
@@ -64,13 +63,17 @@ app.get("/newest", async function (req, res) {
     layout: "main",
     posts: result,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
 app.get("/logout", function(req, res){
   userController.logOut(req);
   res.redirect("/");
+});
+
+app.get("/login", function(req, res){
+  req.session.lastPath = "/";
+  res.redirect(googleApi.GetGoogleURL());    
 });
 
 app.get("/ask", async function (req, res) {
@@ -82,19 +85,22 @@ app.get("/ask", async function (req, res) {
     layout: "main",
     posts: result,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
 app.get("/threads", async function (req, res) {
   let username = req.query.username;
-  const result = await postController.getAllCommentsByUsername(username);
-  renderPage(res, "home", {
-    layout: "threads",
-    posts: result,
-    loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
-  });
+  if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
+    req.session.lastPath = "/";
+    res.redirect(googleApi.GetGoogleURL());    
+  }else{
+    const result = await postController.getAllCommentsByUsername(username);
+    renderPage(res, "home", {
+      layout: "threads",
+      posts: result,
+      loggedUser: req.session.currentUserLogged,
+    });
+  }
 });
 
 app.get("/submitted", async function (req, res) {
@@ -104,30 +110,29 @@ app.get("/submitted", async function (req, res) {
     layout: "main",
     posts: result,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
 app.get("/submit", async function (req, res) {
-  renderPage(res, "home", {
-    layout: "submit",
-    loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
-  });
+  if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
+    req.session.lastPath = "/submit";
+    res.redirect(googleApi.GetGoogleURL());    
+  }else{
+    renderPage(res, "home", {
+      layout: "submit",
+      loggedUser: req.session.currentUserLogged,
+    });
+  }
 });
 
 app.get("/user", async function (req, res) {
   let id = req.query.username;
-  console.log("id: " + id);
   const user = await userController.getByUsername(id);
-  console.log("user:");
-  console.log(user);
   
   renderPage(res, "home", {
     layout: "user",
     user: user,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
@@ -137,7 +142,6 @@ app.get("/profile", async function (req, res) {
     layout: "profile",
     user: user,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
@@ -172,29 +176,33 @@ app.get("/item", async function (req, res) {
     layout: "item",
     post: result,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
 app.post("/item", async function (req, res) {
-  let postId = req.query.id;
-  let author = req.session.currentUserLogged;
-  let creationTime = new Date().toISOString();
-  let message = req.body.text;
+  if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
+    req.session.lastPath = "/item?id=" + req.query.postid;
+    res.redirect(googleApi.GetGoogleURL());    
+  }else{
+    let postId = req.query.id;
+    let author = req.session.currentUserLogged;
+    let creationTime = new Date().toISOString();
+    let message = req.body.text;
 
-  let q =
-    "insert into COMMENTS(postid, author, creationtime, message) values ('" +
-    postId +
-    "', '" +
-    author +
-    "', '" +
-    creationTime +
-    "', '" +
-    message +
-    "')";
+    let q =
+      "insert into COMMENTS(postid, author, creationtime, message) values ('" +
+      postId +
+      "', '" +
+      author +
+      "', '" +
+      creationTime +
+      "', '" +
+      message +
+      "')";
 
-  await db.query(q);
-  res.redirect("/item?id=" + postId);
+    await db.query(q);
+    res.redirect("/item?id=" + postId);
+  }
 });
 
 app.get("/reply", async function (req, res) {
@@ -209,32 +217,36 @@ app.get("/reply", async function (req, res) {
     layout: "reply",
     post: result,
     loggedUser: req.session.currentUserLogged,
-    googleURL: googleApi.GetGoogleURL(),
   });
 });
 
 app.post("/reply", async function (req, res) {
-  let postId = req.query.postid;
-  let author = req.session.currentUserLogged;
-  let creationTime = new Date().toISOString();
-  let parentId = req.query.commentid;
-  let message = req.body.text;
+  if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
+    req.session.lastPath = "/reply?postid="+req.query.postid+"&commentid="+req.query.commentid;
+    res.redirect(googleApi.GetGoogleURL());    
+  }else{
+    let postId = req.query.postid;
+    let author = req.session.currentUserLogged;
+    let creationTime = new Date().toISOString();
+    let parentId = req.query.commentid;
+    let message = req.body.text;
 
-  let q =
-    "insert into COMMENTS(postid, author, creationtime, parentid, message) values ('" +
-    postId +
-    "', '" +
-    author +
-    "', '" +
-    creationTime +
-    "', '" +
-    parentId +
-    "', '" +
-    message +
-    "')";
+    let q =
+      "insert into COMMENTS(postid, author, creationtime, parentid, message) values ('" +
+      postId +
+      "', '" +
+      author +
+      "', '" +
+      creationTime +
+      "', '" +
+      parentId +
+      "', '" +
+      message +
+      "')";
 
-  await db.query(q);
-  res.redirect("/item?id=" + postId);
+    await db.query(q);
+    res.redirect("/item?id=" + postId);
+  }
 });
 
 app.get("/home", async function (req, res) {
@@ -246,13 +258,24 @@ app.get("/500", function (req, res) {
 });
 
 app.get("/votePost", async function (req, res) {
-  await userController.likePost(req.query.id, req.session.currentUserLogged);
-  res.redirect("back");
+  if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
+    console.log(req.path);
+    req.session.lastPath = "/";
+    res.redirect(googleApi.GetGoogleURL());    
+  }else{
+    await userController.likePost(req.query.id, req.session.currentUserLogged);
+    res.redirect("back");
+  }
 });
 
 app.get("/voteComment", async function (req, res) {
-  await userController.likeComment(req.query.id, req.session.currentUserLogged);
-  res.redirect("back");
+  if (req.session.currentUserLogged == undefined || req.session.currentUserLogged == "") {
+    req.session.lastPath = "/";
+    res.redirect(googleApi.GetGoogleURL());    
+  }else{
+    await userController.likeComment(req.query.id, req.session.currentUserLogged);
+    res.redirect("back");
+  }
 });
 
 function errorHandler(err, req, res, next) {
