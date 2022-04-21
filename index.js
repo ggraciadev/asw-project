@@ -41,7 +41,7 @@ app.get("/auth/google/callback", async function (req, res) {
   res.redirect(req.session.lastPath);
 });
 
-app.get(".well-known/pki-validation/A8CEF588C1F0A673A86610DA7ABD6E6D.txt", async function (req, res) {
+app.get("./well-known/pki-validation/A8CEF588C1F0A673A86610DA7ABD6E6D.txt", async function (req, res) {
   res.send("7896F17A0D2A9EEA77E0208D7956DEBC47FE53BFE1D1A8368C50DFAA4A5E97E2\ncomodoca.com\nd026eb6d03cea23")
 });
 
