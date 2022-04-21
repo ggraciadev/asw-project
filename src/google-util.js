@@ -16,7 +16,7 @@ const TOKEN_PATH = 'token.json';
 
 const client_secret = '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';
 const client_id = '212663848106-c3tqnh4i0ikpputa9189i63l0dnd28tg.apps.googleusercontent.com';
-const redirect_uris = 'http://localhost:5000/auth/google/callback';
+const redirect_uris = 'https://proyecto-asw.herokuapp.com/auth/google/callback';
 
 const oauth2Client = new google.auth.OAuth2(
   client_id,
