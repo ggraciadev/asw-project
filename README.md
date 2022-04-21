@@ -1,3 +1,5 @@
+applicació: proyecto-asw.herokuapp.com
+
 Usuaris Github:
  - Guillem Gràcia Andreu: @ggraciadev
  - Pol Ken Galceran Kimura: @polkeng2
