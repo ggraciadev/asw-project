@@ -73,11 +73,11 @@ const getAll = async (orderBy, loggedUser) => {
 
 const getAllAsk = async (orderBy, loggedUser) => {
     try {
-        const q = await db.query("select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 0 as userLiked from comments c, post p where (p.url = '' and c.postid = p.id and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 0 as userLiked from post p where (p.url = '' and p.id not in (select postid from comments) and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) " + 
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 1 as userLiked from comments c, post p where (p.url = '' and c.postid = p.id and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
-        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 1 as userLiked from post p where (p.url = '' and p.id not in (select postid from comments) and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) order by " + orderBy + " desc;");
-        
+        const q = await db.query("select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 0 as userLiked from comments c, post p where ((p.url = '' or p.url is null) and c.postid = p.id and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 0 as userLiked from post p where ((p.url = '' or p.url is null) and p.id not in (select postid from comments) and '" + loggedUser + "' not in (select l.username from likepost l where l.postid = p.id)) " + 
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, count(distinct c.id) as commentsnum, 1 as userLiked from comments c, post p where ((p.url = '' or p.url is null) and c.postid = p.id and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) group by p.id " +
+        "union select p.id, p.title, p.url, p.msg, p.likes, p.username, p.creationtime, 0 as commentsNum, 1 as userLiked from post p where ((p.url = '' or p.url is null) and p.id not in (select postid from comments) and '" + loggedUser + "' in (select l.username from likepost l where l.postid = p.id)) order by " + orderBy + " desc;");
+
         let rows = q.rows;
         let result = [];
         
