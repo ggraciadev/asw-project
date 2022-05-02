@@ -1,1 +1,1 @@
-NODE_TLS_REJECT_UNAUTHORIZED='0' node --trace-warnings index.js
+NODE_TLS_REJECT_UNAUTHORIZED='0' node --trace-warnings ./api/index.js
