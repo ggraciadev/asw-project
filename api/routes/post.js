@@ -17,7 +17,7 @@ router.get("/threads", postController.getAllCommentsByUsername); //OK
 // api/post/submitted
 router.get("/submitted", postController.getAllPostsByUsername); //OK
 
-// api/post/likedPosts
+// api/post/likedPosts/
 router.get("/likedPosts", postController.getLikedPosts); //OK
 
 // api/post/likedComments

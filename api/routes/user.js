@@ -11,7 +11,7 @@ router.get("/votePost", userController.likePost); //OK
 // api/user/voteComment
 router.get("/voteComment", userController.likeComment); //OK
 
-// api/user/
+// api/updateUser/
 router.put("/", userController.updateUser); //OK
 
 module.exports = router;

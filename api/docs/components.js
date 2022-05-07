@@ -41,6 +41,41 @@ module.exports = {
                 description: "The users github account",
                 example: "awakt"
             },
+            post: {
+                type: "object",
+                properties: {
+                    postTitle: {
+                        type: "string",
+                        description: "The title of the post",
+                        example: "Una tortuga en patinete"
+                    },
+                    postUrl: {
+                        type: "number",
+                        description: "This is the url of the post",
+                        example: "www.google.com"
+                    },
+                    postMsg: {
+                        type: "number",
+                        description: "This is the msg of the post",
+                        example: "wiru, awakt, sara, polken"
+                    }
+                }
+            },
+            comment: {
+                type: "object",
+                properties: {
+                    postId: {
+                        type: "number",
+                        description: "The id of the post",
+                        example: "123456789"
+                    },
+                    commentMsg: {
+                        type: "string",
+                        description: "This is the msg of the post",
+                        example: "Aixo es un comentari, i tu?"
+                    }
+                }
+            },
         }
     }
 }

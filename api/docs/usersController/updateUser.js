@@ -1,8 +1,8 @@
 module.exports = {
     put: {
         tags: ["User controller"],
-        description: "Like a Post",
-        operationId: "likePost",
+        description: "Update a user",
+        operationId: "updateUser",
         parameters: [
             ,{
                 name: "username",
