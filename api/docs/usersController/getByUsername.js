@@ -5,13 +5,13 @@ module.exports = {
         operationId: "getByUsername",
         parameters: [
             {
-                name: "id",
-                in: "path",
+                name: "username",
+                in: "query",
                 schema: {
-                    $ref: "#/components/schemas/id",
+                    $ref: "#/components/schemas/username",
                 },
                 required: true,
-                description: "User id",
+                description: "Username",
             }
         ],
         responses: {

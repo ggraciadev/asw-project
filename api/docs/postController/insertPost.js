@@ -4,7 +4,7 @@ module.exports = {
         description: "Insert post",
         operationId: "insertPost",
         parameters: [
-            ,{
+            {
                 name: "post",
                 in: "body",
                 schema: {

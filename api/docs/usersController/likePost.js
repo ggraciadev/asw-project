@@ -4,22 +4,23 @@ module.exports = {
         description: "Like a Post",
         operationId: "likePost",
         parameters: [
-            ,{
+            {
                 name: "post_id",
-                in: "body",
+                in: "query",
                 schema: {
                     $ref: "#/components/schemas/post_id",
                 },
                 required: true,
                 description: "post id",
-            },{
-                name: "username",
-                in: "body",
+            },
+            {
+                name: "logged_user",
+                in: "query",
                 schema: {
                     $ref: "#/components/schemas/username",
                 },
                 required: true,
-                description: "User name",
+                description: "Logged user's username",
             }
         ],
         responses: {

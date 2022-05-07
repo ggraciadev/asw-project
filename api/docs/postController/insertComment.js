@@ -4,8 +4,8 @@ module.exports = {
         description: "Insert comment",
         operationId: "insertComment",
         parameters: [
-            ,{
-                name: "post",
+            {
+                name: "comment",
                 in: "body",
                 schema: {
                     $ref: "#/components/schemas/comment",

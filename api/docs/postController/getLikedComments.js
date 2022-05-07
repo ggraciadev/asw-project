@@ -6,7 +6,7 @@ module.exports = {
         parameters: [
             {
                 name: "username",
-                in: "body",
+                in: "query",
                 schema: {
                     $ref: "#/components/schemas/username",
                 },

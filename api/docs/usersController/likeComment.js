@@ -4,7 +4,7 @@ module.exports = {
         description: "Like a Comment",
         operationId: "likeComment",
         parameters: [
-            ,{
+            {
                 name: "comment_id",
                 in: "body",
                 schema: {
@@ -12,7 +12,8 @@ module.exports = {
                 },
                 required: true,
                 description: "comment id",
-            },{
+            },
+            {
                 name: "username",
                 in: "body",
                 schema: {

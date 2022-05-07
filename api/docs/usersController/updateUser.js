@@ -4,51 +4,15 @@ module.exports = {
         description: "Update a user",
         operationId: "updateUser",
         parameters: [
-            ,{
-                name: "username",
+            {
+                name: "user",
                 in: "body",
                 schema: {
-                    $ref: "#/components/schemas/username",
+                    $ref: "#/components/schemas/user",
                 },
                 required: true,
-                description: "User name",
-            }
-            ,{
-                name: "about me",
-                in: "body",
-                schema: {
-                    $ref: "#/components/schemas/aboutMe",
-                },
-                required: true,
-                description: "User description about me",
-            }
-            ,{
-                name: "phone",
-                in: "body",
-                schema: {
-                    $ref: "#/components/schemas/phone",
-                },
-                required: true,
-                description: "User phone number",
-            }
-            ,{
-                name: "linkedIn",
-                in: "body",
-                schema: {
-                    $ref: "#/components/schemas/linkedIn",
-                },
-                required: true,
-                description: "User linkedIn account",
-            }
-            ,{
-                name: "github",
-                in: "body",
-                schema: {
-                    $ref: "#/components/schemas/github",
-                },
-                required: true,
-                description: "User github account",
-            }
+                description: "update existing user",
+            }    
         ],
         responses: {
             200: {

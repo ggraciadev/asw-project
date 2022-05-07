@@ -2,11 +2,11 @@ module.exports = {
     get: {
         tags: ["Post controller"],
         description: "Get post by id",
-        operationId: "getByIdr",
+        operationId: "getById",
         parameters: [
             {
                 name: "id",
-                in: "path",
+                in: "query",
                 schema: {
                     $ref: "#/components/schemas/id",
                 },

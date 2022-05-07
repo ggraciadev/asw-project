@@ -5,21 +5,21 @@ module.exports = {
         operationId: "getByIdWithOneComment",
         parameters: [
             {
-                name: "id",
-                in: "body",
+                name: "post_id",
+                in: "query",
                 schema: {
-                    $ref: "#/components/schemas/id",
+                    $ref: "#/components/schemas/post_id",
                 },
                 required: true,
-                description: "User id",
+                description: "Post id",
             },{
                 name: "comment_id",
-                in: "body",
+                in: "query",
                 schema: {
                     $ref: "#/components/schemas/comment_id",
                 },
                 required: true,
-                description: "comment id",
+                description: "Comment id",
             }
         ],
         responses: {

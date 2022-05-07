@@ -1,9 +1,19 @@
 module.exports = {
     get: {
         tags: ["Post controller"],
-        descirption: "Get all ask",
+        description: "Get all ask",
         operationId: "getAllAsk",
-        parameters: [],
+        parameters: [
+            {
+                name: "orderby",
+                in: "query",
+                schema: {
+                    $ref: "#/components/schemas/order_by",
+                },
+                required: true,
+                description: "Order By",
+            }
+        ],
         responses: {
             200: {
                 description: "Successful operation",

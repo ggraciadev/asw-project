@@ -3,7 +3,7 @@ const { getAll, getAllAsk, getAllCommentsByUsername, getAllPostsByUsername, getB
      insertPost, insertComment, getLikedComments, getLikedPosts} = require('./postController');
 module.exports = {
     paths: {
-        '/api/user': {
+        '/api/user/': {
             ...getByUsername,
         },
         '/api/updateUser': {
@@ -18,16 +18,16 @@ module.exports = {
         '/api/post/all': {
             ...getAll,
         },
-        '/api/post/item/{id}': {
+        '/api/post/item/': {
             ...getById,
         },
         '/api/post/ask': {
             ...getAllAsk,
         },
-        '/api/post/threads': {
+        '/api/post/threads/': {
             ...getAllCommentsByUsername,
         },
-        '/api/post/submitted': {
+        '/api/post/submitted/': {
             ...getAllPostsByUsername,
         },
         '/api/post/likedPosts': {
@@ -36,7 +36,7 @@ module.exports = {
         '/api/post/likedComments': {
             ...getLikedComments,
         },
-        '/api/post/reply': {
+        '/api/post/reply/': {
             ...getByIdWithOneComment
         },
         '/api/post/submit': {

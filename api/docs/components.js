@@ -2,62 +2,52 @@ module.exports = {
     components: {
         schemas: {
             id: {
-                type: "string",
+                type: "number",
                 description: "The id of the user",
-                example: "62514abbe83aaaa11025098f"
+                example: "62"
             },
             comment_id: {
                 type: "string",
                 description: "The id of the comment",
-                example: "62514abbe83a8f"
+                example: "12"
             },
             username: {
                 type: "string",
                 description: "The username",
-                example: "awakt"
+                example: "gerard.madrid"
             },
             post_id: {
-                type: "string",
-                description: "The id of the post",
-                example: "62514abbe83a8f"
-            },
-            aboutMe: {
-                type: "string",
-                description: "The description about the user",
-                example: "I am a FIBer doing my ASW Project"
-            },
-            phone: {
                 type: "number",
-                description: "The user phone number",
-                example: "684123807"
+                description: "The id of the post",
+                example: "73"
             },
-            linkedIn: {
+            order_by: {
                 type: "string",
-                description: "The user linkedIn account",
-                example: "awakt"
-            },
-            github: {
-                type: "string",
-                description: "The users github account",
-                example: "awakt"
+                description: "The order of the posts",
+                example: "likes"
             },
             post: {
                 type: "object",
                 properties: {
-                    postTitle: {
+                    title: {
                         type: "string",
                         description: "The title of the post",
-                        example: "Una tortuga en patinete"
+                        example: "Hackernews pero encara més cutre"
                     },
-                    postUrl: {
-                        type: "number",
+                    url: {
+                        type: "string",
                         description: "This is the url of the post",
-                        example: "www.google.com"
+                        example: "https://www.tomorrowtides.com/hackernews2.html"
                     },
-                    postMsg: {
-                        type: "number",
-                        description: "This is the msg of the post",
-                        example: "wiru, awakt, sara, polken"
+                    msg: {
+                        type: "string",
+                        description: "This is the message of the post",
+                        example: "Si hackernews ja era cutre, mireu la segona part."
+                    },
+                    username: {
+                        type: "string",
+                        description: "This is the username of the commentor",
+                        example: "gerard.madrid"
                     }
                 }
             },
@@ -67,12 +57,52 @@ module.exports = {
                     postId: {
                         type: "number",
                         description: "The id of the post",
-                        example: "123456789"
+                        example: "73"
                     },
-                    commentMsg: {
+                    parentId: {
+                        type: "number",
+                        description: "The id of the parent comment",
+                        example: "1"
+                    },
+                    message: {
                         type: "string",
                         description: "This is the msg of the post",
-                        example: "Aixo es un comentari, i tu?"
+                        example: "Això es un comentari, i tu?"
+                    },
+                    username: {
+                        type: "string",
+                        description: "This is the username of the commentor",
+                        example: "gerard.madrid"
+                    }
+                }
+            },
+            user: {
+                type: "object",
+                properties: {
+                    username: {
+                        type: "string",
+                        description: "The id of the user",
+                        example: "gerard.madrid"
+                    },
+                    aboutMe: {
+                        type: "string",
+                        description: "A brief description of the user",
+                        example: "I am a FIBer doing my ASW Project"
+                    },
+                    phone: {
+                        type: "number",
+                        description: "The user's phone number",
+                        example: "684123807"
+                    },
+                    linkedIn: {
+                        type: "string",
+                        description: "The user's linkedIn account",
+                        example: "https://www.linkedin.com/in/gerard-madrid/"
+                    },
+                    github: {
+                        type: "string",
+                        description: "The user's github account",
+                        example: "https://github.com/gerardm27"
                     }
                 }
             },
