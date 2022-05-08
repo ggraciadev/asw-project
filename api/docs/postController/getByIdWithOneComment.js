@@ -5,7 +5,7 @@ module.exports = {
         operationId: "getByIdWithOneComment",
         parameters: [
             {
-                name: "post_id",
+                name: "postid",
                 in: "query",
                 schema: {
                     $ref: "#/components/schemas/post_id",
@@ -13,7 +13,7 @@ module.exports = {
                 required: true,
                 description: "Post id",
             },{
-                name: "comment_id",
+                name: "commentid",
                 in: "query",
                 schema: {
                     $ref: "#/components/schemas/comment_id",

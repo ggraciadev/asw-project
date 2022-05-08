@@ -1,18 +1,18 @@
 module.exports = {
-    get: {
+    post: {
         tags: ["Post controller"],
-        description: "Get all posts without url",
-        operationId: "getAllAsk",
+        description: "Reply an existing comment",
+        operationId: "insertComment",
         parameters: [
             {
-                name: "orderby",
-                in: "query",
+                name: "comment",
+                in: "body",
                 schema: {
-                    $ref: "#/components/schemas/order_by",
+                    $ref: "#/components/schemas/reply",
                 },
                 required: true,
-                description: "Order by likes/creationTime",
-            }
+                description: "New reply",
+            }            
         ],
         responses: {
             200: {

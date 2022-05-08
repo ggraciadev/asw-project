@@ -1,6 +1,6 @@
 const { getByUsername , likeComment, likePost, updateUser,} = require('./usersController');
-const { getAll, getAllAsk, getAllCommentsByUsername, getAllPostsByUsername, getById, getByIdWithOneComment,  //getByURL??????
-     insertPost, insertComment, getLikedComments, getLikedPosts} = require('./postController');
+const { getAll, getAllAsk, getAllCommentsByUsername, getAllPostsByUsername, getById, getByIdWithOneComment, //getByURL??????
+     insertPost, insertComment, replyComment, getLikedComments, getLikedPosts} = require('./postController');
 module.exports = {
     paths: {
         '/api/user/': {
@@ -46,7 +46,7 @@ module.exports = {
             ...insertComment,
         },
         '/api/post/reply': {
-            ...insertComment,
+            ...replyComment,
         },
     }
 }

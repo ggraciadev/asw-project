@@ -1,12 +1,12 @@
 module.exports = {
     put: {
         tags: ["User controller"],
-        description: "Like a Comment",
+        description: "Like a comment",
         operationId: "likeComment",
         parameters: [
             {
-                name: "comment_id",
-                in: "body",
+                name: "commentid",
+                in: "query",
                 schema: {
                     $ref: "#/components/schemas/comment_id",
                 },
@@ -15,7 +15,7 @@ module.exports = {
             },
             {
                 name: "username",
-                in: "body",
+                in: "query",
                 schema: {
                     $ref: "#/components/schemas/username",
                 },

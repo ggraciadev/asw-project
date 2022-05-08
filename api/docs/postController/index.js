@@ -8,6 +8,7 @@ const getLikedComments = require('./getLikedComments');
 const getByIdWithOneComment = require('./getByIdWithOneComment');
 const insertPost = require('./insertPost');
 const insertComment = require('./insertComment');
+const replyComment = require('./replyComment');
 
 module.exports = {
     getAll: getAll,
@@ -20,5 +21,5 @@ module.exports = {
     getByIdWithOneComment: getByIdWithOneComment,
     insertPost: insertPost,
     insertComment: insertComment,
-    insertCommentReply: insertComment,
+    replyComment: replyComment,
 }

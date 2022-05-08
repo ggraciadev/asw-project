@@ -5,7 +5,7 @@ module.exports = {
         operationId: "getAll",
         parameters: [
             {
-                name: "order_by",
+                name: "orderby",
                 in: "query",
                 schema: {
                     $ref: "#/components/schemas/order_by",

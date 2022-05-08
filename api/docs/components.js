@@ -7,14 +7,34 @@ module.exports = {
                 example: "62"
             },
             comment_id: {
-                type: "string",
+                type: "number",
                 description: "The id of the comment",
-                example: "12"
+                example: "58"
             },
             username: {
                 type: "string",
                 description: "The username",
                 example: "gerard.madrid"
+            },
+            about_me: {
+                type: "string",
+                description: "A brief description of the user",
+                example: "I am a FIBer doing my ASW Project"
+            },
+            phone: {
+                type: "string",
+                description: "The user's phone number",
+                example: "684123807"
+            },
+            linked_in: {
+                type: "string",
+                description: "The user's linkedIn account",
+                example: "https://www.linkedin.com/in/gerard-madrid/"
+            },
+            github: {
+                type: "string",
+                description: "The user's github account",
+                example: "https://github.com/gerardm27"
             },
             post_id: {
                 type: "number",
@@ -54,20 +74,45 @@ module.exports = {
             comment: {
                 type: "object",
                 properties: {
-                    postId: {
+                    postid: {
                         type: "number",
                         description: "The id of the post",
                         example: "73"
                     },
-                    parentId: {
-                        type: "number",
+                    parentid: {
+                        type: null,
                         description: "The id of the parent comment",
-                        example: "1"
+                        example: "null"
                     },
                     message: {
                         type: "string",
                         description: "This is the msg of the post",
                         example: "Això es un comentari, i tu?"
+                    },
+                    username: {
+                        type: "string",
+                        description: "This is the username of the commentor",
+                        example: "gerard.madrid"
+                    }
+                }
+            },
+            reply: {
+                type: "object",
+                properties: {
+                    postid: {
+                        type: "number",
+                        description: "The id of the post",
+                        example: "73"
+                    },
+                    parentid: {
+                        type: "number",
+                        description: "The id of the parent comment",
+                        example: "58"
+                    },
+                    message: {
+                        type: "string",
+                        description: "This is the msg of the post",
+                        example: "I tu?"
                     },
                     username: {
                         type: "string",
@@ -84,7 +129,7 @@ module.exports = {
                         description: "The id of the user",
                         example: "gerard.madrid"
                     },
-                    aboutMe: {
+                    aboutme: {
                         type: "string",
                         description: "A brief description of the user",
                         example: "I am a FIBer doing my ASW Project"
@@ -94,7 +139,7 @@ module.exports = {
                         description: "The user's phone number",
                         example: "684123807"
                     },
-                    linkedIn: {
+                    linkedin: {
                         type: "string",
                         description: "The user's linkedIn account",
                         example: "https://www.linkedin.com/in/gerard-madrid/"

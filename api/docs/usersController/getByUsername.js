@@ -1,7 +1,7 @@
 module.exports = {
     get: {
         tags: ["User controller"],
-        description: "Get a user by the username",
+        description: "Get a user by username",
         operationId: "getByUsername",
         parameters: [
             {

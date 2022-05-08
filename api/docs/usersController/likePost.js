@@ -1,11 +1,11 @@
 module.exports = {
     put: {
         tags: ["User controller"],
-        description: "Like a Post",
+        description: "Like a post",
         operationId: "likePost",
         parameters: [
             {
-                name: "post_id",
+                name: "postid",
                 in: "query",
                 schema: {
                     $ref: "#/components/schemas/post_id",
@@ -14,7 +14,7 @@ module.exports = {
                 description: "Post id",
             },
             {
-                name: "logged_user",
+                name: "username",
                 in: "query",
                 schema: {
                     $ref: "#/components/schemas/username",

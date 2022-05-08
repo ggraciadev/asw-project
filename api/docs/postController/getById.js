@@ -1,17 +1,17 @@
 module.exports = {
     get: {
         tags: ["Post controller"],
-        description: "Get all posts made by a user",
+        description: "Get post by id",
         operationId: "getById",
         parameters: [
             {
                 name: "id",
                 in: "query",
                 schema: {
-                    $ref: "#/components/schemas/id",
+                    $ref: "#/components/schemas/post_id",
                 },
                 required: true,
-                description: "User id",
+                description: "Post id",
             }
         ],
         responses: {
