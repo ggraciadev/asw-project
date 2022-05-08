@@ -11,7 +11,7 @@ module.exports = {
                     $ref: "#/components/schemas/comment_id",
                 },
                 required: true,
-                description: "comment id",
+                description: "Comment id",
             },
             {
                 name: "username",
@@ -20,7 +20,7 @@ module.exports = {
                     $ref: "#/components/schemas/username",
                 },
                 required: true,
-                description: "User name",
+                description: "Username",
             }
         ],
         responses: {

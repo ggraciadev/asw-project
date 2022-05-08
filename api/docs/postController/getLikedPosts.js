@@ -1,7 +1,7 @@
 module.exports = {
     get: {
         tags: ["Post controller"],
-        description: "Get liked posts",
+        description: "Get all posts liked by a user",
         operationId: "getLikedPosts",
         parameters: [
             {

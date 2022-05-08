@@ -23,7 +23,7 @@ module.exports = {
             },
             order_by: {
                 type: "string",
-                description: "The order of the posts",
+                description: "The order of the post in the array",
                 example: "likes"
             },
             post: {

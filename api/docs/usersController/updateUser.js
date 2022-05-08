@@ -1,7 +1,7 @@
 module.exports = {
     put: {
         tags: ["User controller"],
-        description: "Update a user",
+        description: "Update user information",
         operationId: "updateUser",
         parameters: [
             {
@@ -11,7 +11,7 @@ module.exports = {
                     $ref: "#/components/schemas/user",
                 },
                 required: true,
-                description: "update existing user",
+                description: "Updated user",
             }    
         ],
         responses: {

@@ -1,7 +1,7 @@
 module.exports = {
     post: {
         tags: ["Post controller"],
-        description: "Insert comment",
+        description: "Insert a new comment",
         operationId: "insertComment",
         parameters: [
             {
@@ -11,7 +11,7 @@ module.exports = {
                     $ref: "#/components/schemas/comment",
                 },
                 required: true,
-                description: "new comment",
+                description: "New comment",
             }            
         ],
         responses: {

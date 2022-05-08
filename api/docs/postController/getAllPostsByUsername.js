@@ -1,7 +1,7 @@
 module.exports = {
     get: {
         tags: ["Post controller"],
-        description: "Get all posts by username",
+        description: "Get all posts made by a user",
         operationId: "getAllPostsByUsername",
         parameters: [
             {

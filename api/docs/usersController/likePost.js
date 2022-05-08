@@ -11,7 +11,7 @@ module.exports = {
                     $ref: "#/components/schemas/post_id",
                 },
                 required: true,
-                description: "post id",
+                description: "Post id",
             },
             {
                 name: "logged_user",
@@ -20,7 +20,7 @@ module.exports = {
                     $ref: "#/components/schemas/username",
                 },
                 required: true,
-                description: "Logged user's username",
+                description: "Username",
             }
         ],
         responses: {

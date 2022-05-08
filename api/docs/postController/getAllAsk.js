@@ -5,13 +5,13 @@ module.exports = {
         operationId: "getAllAsk",
         parameters: [
             {
-                name: "orderby",
+                name: "order_by",
                 in: "query",
                 schema: {
                     $ref: "#/components/schemas/order_by",
                 },
                 required: true,
-                description: "Order By",
+                description: "Order by likes/creationTime",
             }
         ],
         responses: {
