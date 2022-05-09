@@ -35,4 +35,7 @@ router.post("/item", postController.insertComment); //OK
 // api/post/reply
 router.post("/reply", postController.insertComment); //OK
 
+// api/post/url
+router.post("/url", postController.getByURL);
+
 module.exports = router;

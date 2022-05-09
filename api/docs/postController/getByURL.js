@@ -1,18 +1,20 @@
 module.exports = {
-    post: {
+    get: {
         tags: ["Post controller"],
-        description: "Reply an existing comment",
-        operationId: "insertComment",
+        description: "Get a post by the URL",
+        operationId: "getByURL",
         parameters: [
             {
-                name: "comment",
-                in: "body",
+                name: "url",
+                in: "path",
                 schema: {
-                    $ref: "#/components/schemas/reply",
+                    type: "string",
+                    description: "This is the url of the post",
+                    example: "https://www.tomorrowtides.com/hackernews2.html"
                 },
                 required: true,
-                description: "New reply",
-            }            
+                description: "The post URL",
+            }
         ],
         responses: {
             200: {
@@ -22,7 +24,7 @@ module.exports = {
                 }
             },
             404 : {
-                description: "Parent comment not found",
+                description: "URL not found",
             },
             500: {
                 description: "Internal server error",

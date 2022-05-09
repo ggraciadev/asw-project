@@ -167,7 +167,6 @@ const getByIdWithOneComment = async (req, res) => {
 const obtainObjectByURL = async (url) => {
     try {
         if(url === null || url === '' || url === undefined) {
-            console.log("CASITO UNO");
             return null;
         }
         const query = "select * from Post where url='" + url + "';";

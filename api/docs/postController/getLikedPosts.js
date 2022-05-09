@@ -18,6 +18,9 @@ module.exports = {
             200: {
                 description: "Successful operation",
             },
+            404 : {
+                description: "Posts not found",
+            },
             500: {
                 description: "Internal server error",
             }

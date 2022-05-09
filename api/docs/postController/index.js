@@ -9,6 +9,7 @@ const getByIdWithOneComment = require('./getByIdWithOneComment');
 const insertPost = require('./insertPost');
 const insertComment = require('./insertComment');
 const replyComment = require('./replyComment');
+const getByURL = require('./getByURL');
 
 module.exports = {
     getAll: getAll,
@@ -22,4 +23,5 @@ module.exports = {
     insertPost: insertPost,
     insertComment: insertComment,
     replyComment: replyComment,
+    getByURL: getByURL,
 }
