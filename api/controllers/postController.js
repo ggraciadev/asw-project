@@ -66,7 +66,7 @@ const getAll = async (req, res) => {
             let temp = await createPostObj(rows[i], "noComments", null, null);
             result.push(temp);
         }
-        res.status(200).send(JSON.stringify(result));
+        res.status(200).send({posts: result});
     }
     catch (error) {
         res.status(500).send({error: error.toString()});
@@ -85,7 +85,7 @@ const getAllAsk = async (req, res) => {
             let temp = await createPostObj(rows[i], "noComments", null, null);
             result.push(temp);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({posts: result});
     }
     catch (error) {
         return res.status(500).send({error: error.toString()});
@@ -109,7 +109,7 @@ const getAllCommentsByUsername = async (req,res) => {
         for(let i = 0; i < treeComments.length; ++i) {
             result.push(treeComments[i]);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({comments: result});
     }
     catch (error) {
         return res.status(500).send({error: error.toString()});
@@ -130,7 +130,7 @@ const getAllPostsByUsername = async (req,res) => {
             let temp = await createPostObj(rows[i], "noComments", null, null);
             result.push(temp);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({posts: result});
     }
     catch (error) {
         return res.status(500).send({error: error.toString()});
@@ -143,7 +143,7 @@ const getById = async (req, res) => {
         const q = await db.query("select * from Post where id=" + id + " order by likes desc");
         let rows = q.rows
         let temp = await createPostObj(rows[0], "withComments", null, null);
-        return res.status(200).send(JSON.stringify(temp));
+        return res.status(200).send({post: temp});
 
     } catch (error) {
         res.status(500).send({error: error.toString()});
@@ -157,7 +157,7 @@ const getByIdWithOneComment = async (req, res) => {
         const q = await db.query("select * from Post where id=" + id + " order by likes desc");
         let rows = q.rows
         let temp = await createPostObj(rows[0], "oneComment", commentid, null);
-        return res.status(200).send(JSON.stringify(temp));
+        return res.status(200).send({post: temp});
 
     } catch (error) {
         res.status(404).send({error: error.toString()});
@@ -280,7 +280,7 @@ const insertComment = async (req, res) => {
 
         console.log(q);
         let result = await db.query(q);
-        return res.status(200).send(JSON.stringify(result.rows[0]));
+        return res.status(200).send({comment: result.rows[0]});
     }
     catch (error) {
         res.status(500).send({error: error.toString()});
@@ -305,7 +305,7 @@ const getLikedComments = async (req, res) => {
         for(let i = 0; i < treeComments.length; ++i) {
             result.push(treeComments[i]);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({comments: result});
     }
     catch (error) {
         res.status(404).send({error: error.toString()});
@@ -324,7 +324,7 @@ const getLikedPosts = async (req, res) => {
             let temp = await createPostObj(rows[i], "noComments", null, user_name);
             result.push(temp);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({posts: result});
     }
     catch (error) {
         res.status(404).send({error: error.toString()});

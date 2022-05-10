@@ -4,7 +4,7 @@ module.exports = {
         description: "Update user information",
         operationId: "updateUser",
         parameters: [
-            {
+            /* {
                 name: "username",
                 in: "body",
                 schema: {
@@ -48,7 +48,16 @@ module.exports = {
                 },
                 required: true,
                 description: "Github account",
-            }   
+            }    */
+            {
+                name: "username",
+                in: "body",
+                schema: {
+                    $ref: "#/components/schemas/user",
+                },
+                required: true,
+                description: "User",
+            }
         ],
         responses: {
             200: {

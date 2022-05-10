@@ -77,7 +77,7 @@ const getByUsername = async (req, res) => {
         let rows = q.rows
         let temp = await createUserObj(rows[0], true);
 
-        return res.status(200).send(JSON.stringify(temp));
+        return res.status(200).send({user: temp});
 
     } catch (error) {
         res.status(500).send({error: error.toString()});
@@ -95,7 +95,7 @@ const updateUser = async (req, res) => {
         let q = "update Users set aboutme='" + aboutMe + "', phone='" + phone + "', linusername='" + linkedin + "', ghusername='" + github + "' where username='" + username + "' RETURNING *;";
         console.log(q);
         let result = await db.query(q);
-        return res.status(200).send(JSON.stringify(result.rows[0]));
+        return res.status(200).send({user: result.rows[0]});
     }
     catch (error) {
         res.status(500).send({error: error.toString()});
