@@ -20,6 +20,8 @@ router.get("/submitted", postController.getAllPostsByUsername); //OK
 // api/post/likedPosts/
 router.get("/likedPosts", postController.getLikedPosts); //OK
 
+router.get("/url", postController.getByURL); //OK
+
 // api/post/likedComments
 router.get("/likedComments", postController.getLikedComments); //OK
 

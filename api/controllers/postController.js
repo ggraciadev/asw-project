@@ -186,7 +186,7 @@ const obtainObjectByURL = async (url) => {
 
 //Post if URL already exists, null otherwise
 const getByURL = async (req, res) => {
-    let result = await obtainObjectByURL(req.body.url);
+    let result = await obtainObjectByURL(req.query.url);
     if(result == null) {
         return res.status(404).send({error: "URL not found"});
     }

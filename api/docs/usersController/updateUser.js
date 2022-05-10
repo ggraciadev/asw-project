@@ -50,7 +50,7 @@ module.exports = {
                 description: "Github account",
             }    */
             {
-                name: "username",
+                name: "user",
                 in: "body",
                 schema: {
                     $ref: "#/components/schemas/user",

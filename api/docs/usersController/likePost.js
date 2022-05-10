@@ -1,5 +1,5 @@
 module.exports = {
-    put: {
+    get: {
         tags: ["User controller"],
         description: "Like a post",
         operationId: "likePost",

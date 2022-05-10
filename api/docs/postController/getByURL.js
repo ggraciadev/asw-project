@@ -6,11 +6,11 @@ module.exports = {
         parameters: [
             {
                 name: "url",
-                in: "path",
+                in: "query",
                 schema: {
                     type: "string",
                     description: "This is the url of the post",
-                    example: "https://www.tomorrowtides.com/hackernews2.html"
+                    example: `https://www.tomorrowtides.com/hackernews2.html`,
                 },
                 required: true,
                 description: "The post URL",

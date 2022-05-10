@@ -6,13 +6,13 @@ module.exports = {
         '/api/user/': {
             ...getByUsername,
         },
-        '/api/updateUser': {
+        '/api/user': {
             ...updateUser
         },
-        '/api/users/voteComment': {
+        '/api/user/voteComment': {
             ...likeComment,
         },
-        '/api/users/votePost': {
+        '/api/user/votePost': {
             ...likePost,
         },
         '/api/post/all': {
