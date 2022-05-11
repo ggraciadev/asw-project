@@ -1,7 +1,6 @@
 const db = require("../db.js");
 const {Post, Comment} = require("../models");
-
-
+const UsersController = require ("./usersController");
 
 const createCommentTreeRec = (comments, comment) => {
     for(let i = 0; i < comments.length; i++) {
@@ -197,6 +196,13 @@ const getByURL = async (req, res) => {
 
 const insertPost = async (req, res) => {
     try {
+        //hacer un get en la base de datos 
+        let user = await UsersController.getByUsernameAux(req.body.username);
+        if(req.body.apikey == null || req.body.apikey == '' || req.body.apikey == undefined ||
+            req.body.apikey != user.apikey) { 
+            res.status(403).send({error: "Not authorized"});
+            return;
+        }
         let linkToGo = "/";
         let title = req.body.title;
         let url = "";
@@ -263,6 +269,14 @@ const insertPost = async (req, res) => {
 
 const insertComment = async (req, res) => {
     try {
+        console.log("Llego aqui")
+        let user = await UsersController.getByUsernameAux(req.body.username);
+        console.log("Llego alla");
+        if(req.body.apikey == null || req.body.apikey == '' || req.body.apikey == undefined ||
+            req.body.apikey != user.apikey) { 
+            res.status(403).send({error: "Not authorized"});
+            return;
+        }
         let postid = req.body.postid;
         let parentid = req.body.parentid;
         let message = req.body.message;

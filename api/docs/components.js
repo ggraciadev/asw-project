@@ -16,6 +16,16 @@ module.exports = {
         description: "The username",
         example: "gerard.madrid",
       },
+      apikey: {
+        type: "object",
+        properties: {
+          apikey: {
+            type: "string",
+            description: "Api Key of the user",
+            example: "4ce9434e63b90aa82bb793cd58a478f0",
+          }
+        }
+      },
       post_id: {
         type: "number",
         description: "The id of the post",
