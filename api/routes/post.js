@@ -17,8 +17,10 @@ router.get("/threads", postController.getAllCommentsByUsername); //OK
 // api/post/submitted
 router.get("/submitted", postController.getAllPostsByUsername); //OK
 
-// api/post/likedPosts
+// api/post/likedPosts/
 router.get("/likedPosts", postController.getLikedPosts); //OK
+
+router.get("/url", postController.getByURL); //OK
 
 // api/post/likedComments
 router.get("/likedComments", postController.getLikedComments); //OK
@@ -34,5 +36,8 @@ router.post("/item", postController.insertComment); //OK
 
 // api/post/reply
 router.post("/reply", postController.insertComment); //OK
+
+// api/post/url
+router.post("/url", postController.getByURL);
 
 module.exports = router;

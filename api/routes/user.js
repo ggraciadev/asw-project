@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const userController = require("../controllers/userController");
+const userController = require("../controllers/usersController");
 
 // api/user/
 router.get("/", userController.getByUsername); //OK
 
 // api/user/votePost
-router.get("/votePost", userController.likePost); //OK
+router.put("/votePost", userController.likePost); //OK
 
 // api/user/voteComment
-router.get("/voteComment", userController.likeComment); //OK
+router.put("/voteComment", userController.likeComment); //OK
 
 // api/user/
 router.put("/", userController.updateUser); //OK

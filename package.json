@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cd api && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "gga",
@@ -19,6 +20,7 @@
     "handlebars-dateformat": "^1.1.2",
     "passport": "^0.5.2",
     "passport-google-oauth": "^2.0.0",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "swagger-ui-express": "^4.3.0"
   }
 }

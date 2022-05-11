@@ -1,7 +1,6 @@
 const db = require("../db.js");
 const {Post, Comment} = require("../models");
-
-
+const UsersController = require ("./usersController");
 
 const createCommentTreeRec = (comments, comment) => {
     for(let i = 0; i < comments.length; i++) {
@@ -66,7 +65,7 @@ const getAll = async (req, res) => {
             let temp = await createPostObj(rows[i], "noComments", null, null);
             result.push(temp);
         }
-        res.status(200).send(JSON.stringify(result));
+        res.status(200).send({posts: result});
     }
     catch (error) {
         res.status(500).send({error: error.toString()});
@@ -85,7 +84,7 @@ const getAllAsk = async (req, res) => {
             let temp = await createPostObj(rows[i], "noComments", null, null);
             result.push(temp);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({posts: result});
     }
     catch (error) {
         return res.status(500).send({error: error.toString()});
@@ -109,7 +108,7 @@ const getAllCommentsByUsername = async (req,res) => {
         for(let i = 0; i < treeComments.length; ++i) {
             result.push(treeComments[i]);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({comments: result});
     }
     catch (error) {
         return res.status(500).send({error: error.toString()});
@@ -130,7 +129,7 @@ const getAllPostsByUsername = async (req,res) => {
             let temp = await createPostObj(rows[i], "noComments", null, null);
             result.push(temp);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({posts: result});
     }
     catch (error) {
         return res.status(500).send({error: error.toString()});
@@ -143,7 +142,7 @@ const getById = async (req, res) => {
         const q = await db.query("select * from Post where id=" + id + " order by likes desc");
         let rows = q.rows
         let temp = await createPostObj(rows[0], "withComments", null, null);
-        return res.status(200).send(JSON.stringify(temp));
+        return res.status(200).send({post: temp});
 
     } catch (error) {
         res.status(500).send({error: error.toString()});
@@ -157,7 +156,7 @@ const getByIdWithOneComment = async (req, res) => {
         const q = await db.query("select * from Post where id=" + id + " order by likes desc");
         let rows = q.rows
         let temp = await createPostObj(rows[0], "oneComment", commentid, null);
-        return res.status(200).send(JSON.stringify(temp));
+        return res.status(200).send({post: temp});
 
     } catch (error) {
         res.status(404).send({error: error.toString()});
@@ -167,7 +166,6 @@ const getByIdWithOneComment = async (req, res) => {
 const obtainObjectByURL = async (url) => {
     try {
         if(url === null || url === '' || url === undefined) {
-            console.log("CASITO UNO");
             return null;
         }
         const query = "select * from Post where url='" + url + "';";
@@ -187,17 +185,24 @@ const obtainObjectByURL = async (url) => {
 
 //Post if URL already exists, null otherwise
 const getByURL = async (req, res) => {
-    let result = await obtainObjectByURL(req.body.url);
+    let result = await obtainObjectByURL(req.query.url);
     if(result == null) {
         return res.status(404).send({error: "URL not found"});
     }
     else {
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({post: result});
     }
 }
 
 const insertPost = async (req, res) => {
     try {
+        //hacer un get en la base de datos 
+        let user = await UsersController.getByUsernameAux(req.body.username);
+        if(req.body.apikey == null || req.body.apikey == '' || req.body.apikey == undefined ||
+            req.body.apikey != user.apikey) { 
+            res.status(403).send({error: "Not authorized"});
+            return;
+        }
         let linkToGo = "/";
         let title = req.body.title;
         let url = "";
@@ -264,6 +269,14 @@ const insertPost = async (req, res) => {
 
 const insertComment = async (req, res) => {
     try {
+        console.log("Llego aqui")
+        let user = await UsersController.getByUsernameAux(req.body.username);
+        console.log("Llego alla");
+        if(req.body.apikey == null || req.body.apikey == '' || req.body.apikey == undefined ||
+            req.body.apikey != user.apikey) { 
+            res.status(403).send({error: "Not authorized"});
+            return;
+        }
         let postid = req.body.postid;
         let parentid = req.body.parentid;
         let message = req.body.message;
@@ -281,7 +294,7 @@ const insertComment = async (req, res) => {
 
         console.log(q);
         let result = await db.query(q);
-        return res.status(200).send(JSON.stringify(result.rows[0]));
+        return res.status(200).send({comment: result.rows[0]});
     }
     catch (error) {
         res.status(500).send({error: error.toString()});
@@ -306,7 +319,7 @@ const getLikedComments = async (req, res) => {
         for(let i = 0; i < treeComments.length; ++i) {
             result.push(treeComments[i]);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({comments: result});
     }
     catch (error) {
         res.status(404).send({error: error.toString()});
@@ -325,7 +338,7 @@ const getLikedPosts = async (req, res) => {
             let temp = await createPostObj(rows[i], "noComments", null, user_name);
             result.push(temp);
         }
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({posts: result});
     }
     catch (error) {
         res.status(404).send({error: error.toString()});
