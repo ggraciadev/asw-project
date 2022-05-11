@@ -191,7 +191,7 @@ const getByURL = async (req, res) => {
         return res.status(404).send({error: "URL not found"});
     }
     else {
-        return res.status(200).send(JSON.stringify(result));
+        return res.status(200).send({post: result});
     }
 }
 
