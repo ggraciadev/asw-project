@@ -2,7 +2,7 @@ const db = require("../db.js");
 const {Post, Comment, User} = require("../models");
 
 const createUserObj = async (row) => {
-    let obj = new User(row.username, row.email, row.pswd, row.creationtime, row.aboutme, row.phone, row.linusername, row.ghusername, row.likedComments, row.likedPosts);
+    let obj = new User(row.username, row.email, row.pswd, row.creationtime, row.aboutme, row.phone, row.linusername, row.ghusername, row.apikey, row.likedComments, row.likedPosts);
     return obj;
 }
 async function logInGoogle(email, req) {

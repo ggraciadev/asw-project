@@ -1,5 +1,5 @@
 module.exports = {
-    get: {
+    put: {
         tags: ["User controller"],
         description: "Like a post",
         operationId: "likePost",
@@ -21,6 +21,15 @@ module.exports = {
                 },
                 required: true,
                 description: "Username",
+            },
+            {
+                name: "apikey",
+                in: "body",
+                schema: {
+                    $ref: "#/components/schemas/apikey",
+                },
+                required: true,
+                description: "Api Key",
             }
         ],
         responses: {
